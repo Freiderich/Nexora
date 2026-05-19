@@ -150,7 +150,25 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 960px) {
+  .landing-hero {
+    gap: 28px;
+  }
+
+  .landing-visual {
+    order: -1;
+  }
+
+  .mock-stack {
+    height: 360px;
+  }
+}
+
 @media (max-width: 720px) {
+  .landing {
+    padding-top: 20px;
+  }
+
   .mock-stack {
     height: 340px;
   }
@@ -158,5 +176,31 @@
   .mock-card.photo {
     width: 160px;
     height: 180px;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+  }
+
+  .landing-actions .primary,
+  .landing-actions .ghost {
+    width: 100%;
+    text-align: center;
+  }
+
+  .landing-strip {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .mock-card.overlay {
+    inset: auto 10px 26px 20px;
+    height: 160px;
+  }
+
+  .mock-card.photo {
+    width: 140px;
+    height: 150px;
   }
 }
