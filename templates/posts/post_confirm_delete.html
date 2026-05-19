@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="form-card">
+    <h1>Delete post?</h1>
+    <p class="muted">This action cannot be undone.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="danger">Delete</button>
+      <a class="ghost" href="{% url 'post_detail' post_id=post.id %}">Cancel</a>
+    </form>
+  </section>
+{% endblock %}

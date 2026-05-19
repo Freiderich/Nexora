@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="profile-header">
+    <div class="avatar">
+      {% if profile_user.profile.image %}
+        <img src="{{ profile_user.profile.image.url }}" alt="{{ profile_user.username }}" />
+      {% else %}
+        <div class="avatar-fallback">{{ profile_user.username|slice:":1" }}</div>
+      {% endif %}
+    </div>
+    <div class="profile-info">
+      <h1>{{ profile_user.username }}</h1>
+      <p class="muted">{{ profile_user.profile.bio|default:"No bio yet." }}</p>
+      {% if user == profile_user %}
+        <a class="ghost" href="{% url 'edit_profile' %}">Edit profile</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="profile-posts">
+    <h2>Recent posts</h2>
+    <div class="feed">
+      {% for post in profile_user.posts.all %}
+        <article class="card">
+          <div class="card-header">
+            <a href="{% url 'profile' username=post.author.username %}">@{{ post.author.username }}</a>
+            <span class="muted">{{ post.created_at|date:"M d, Y" }}</span>
+          </div>
+          <p>{{ post.content }}</p>
+          {% if post.image %}
+            <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
+          {% endif %}
+          <div class="card-actions">
+            <a href="{% url 'post_detail' post_id=post.id %}">View details</a>
+          </div>
+        </article>
+      {% empty %}
+        <p class="muted">No posts yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

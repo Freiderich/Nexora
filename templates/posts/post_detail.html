@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="card detail">
+    <div class="card-header">
+      <a href="{% url 'profile' username=post.author.username %}">@{{ post.author.username }}</a>
+      <span class="muted">{{ post.created_at|date:"M d, Y" }}</span>
+    </div>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+      <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
+    {% endif %}
+    <div class="card-actions">
+      <form method="post" action="{% url 'toggle_like' post_id=post.id %}">
+        {% csrf_token %}
+        <button type="submit" class="ghost">❤ {{ post.likes_count }}</button>
+      </form>
+      {% if user == post.author %}
+        <a href="{% url 'post_edit' post_id=post.id %}">Edit</a>
+        <a class="danger" href="{% url 'post_delete' post_id=post.id %}">Delete</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="comments">
+    <h2>Comments</h2>
+    {% if user.is_authenticated %}
+      <form class="comment-form" method="post" action="{% url 'comment_create' post_id=post.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="primary">Post comment</button>
+      </form>
+    {% else %}
+      <p class="muted">Login to join the conversation.</p>
+    {% endif %}
+
+    <div class="comment-list">
+      {% for comment in comments %}
+        <div class="comment">
+          <div class="comment-meta">
+            <a href="{% url 'profile' username=comment.author.username %}">@{{ comment.author.username }}</a>
+            <span class="muted">{{ comment.created_at|date:"M d, Y" }}</span>
+          </div>
+          <p>{{ comment.body }}</p>
+          {% if user == comment.author %}
+            <form method="post" action="{% url 'comment_delete' comment_id=comment.id %}">
+              {% csrf_token %}
+              <button type="submit" class="link-button">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="muted">No comments yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
