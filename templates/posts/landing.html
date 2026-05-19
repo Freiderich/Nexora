@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+{% endblock %}
+
+{% block main_class %}landing{% endblock %}
+
+{% block content %}
+  <section class="landing-hero">
+    <div class="landing-copy">
+      <p class="eyebrow">Nexora</p>
+      <h1>Share moments. Build your vibe.</h1>
+      <p class="muted">
+        A minimalist social space to post what matters now and keep the conversation
+        moving.
+      </p>
+      <div class="landing-actions">
+        <a class="primary" href="{% url 'register' %}">Create account</a>
+        <a class="ghost" href="{% url 'login' %}">Sign in</a>
+      </div>
+      <div class="landing-stats">
+        <div>
+          <span>2k+</span>
+          <small>posts today</small>
+        </div>
+        <div>
+          <span>620</span>
+          <small>active creators</small>
+        </div>
+        <div>
+          <span>98%</span>
+          <small>positive vibes</small>
+        </div>
+      </div>
+    </div>
+    <div class="landing-visual">
+      <div class="mock-stack">
+        <div class="mock-card">
+          <div class="mock-header">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="mock-content">
+            <div class="pill">Live now</div>
+            <h3>Tonight’s vibe</h3>
+            <p>Small moments, big energy.</p>
+          </div>
+        </div>
+        <div class="mock-card overlay">
+          <div class="avatar-ring">N</div>
+          <p>“Best day. Best people.”</p>
+          <div class="mock-actions">
+            <span>❤ 128</span>
+            <span>💬 24</span>
+          </div>
+        </div>
+        <div class="mock-card photo">
+          <div class="photo-swatch"></div>
+          <div class="photo-swatch"></div>
+          <div class="photo-swatch"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-strip">
+    <div>
+      <h2>Built for short, real updates.</h2>
+      <p class="muted">Post, like, comment, and keep moving with your people.</p>
+    </div>
+    <a class="primary" href="{% url 'register' %}">Join Nexora</a>
+  </section>
+{% endblock %}

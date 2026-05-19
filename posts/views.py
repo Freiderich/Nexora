@@ -7,6 +7,8 @@ from .models import Comment, Like, Post
 
 
 def home(request):
+    if not request.user.is_authenticated:
+        return render(request, "posts/landing.html")
     posts = (
         Post.objects.select_related("author", "author__profile")
         .prefetch_related("comments", "likes")
