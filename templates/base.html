@@ -4,16 +4,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VibeSpace</title>
+    <title>Nexora</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/layout.css' %}" />
     <link rel="stylesheet" href="{% static 'css/components.css' %}" />
     <link rel="stylesheet" href="{% static 'css/pages.css' %}" />
+    {% block extra_css %}{% endblock %}
   </head>
   <body>
     <header class="site-header">
       <div class="container nav">
-        <a class="logo" href="{% url 'home' %}">VibeSpace</a>
+        <a class="logo" href="{% url 'home' %}">Nexora</a>
         <nav class="menu">
           <a href="{% url 'home' %}">Home</a>
           {% if user.is_authenticated %}
@@ -31,7 +32,7 @@
       </div>
     </header>
 
-    <main class="container">
+    <main class="container {% block main_class %}{% endblock %}">
       {% if messages %}
         <div class="messages">
           {% for message in messages %}

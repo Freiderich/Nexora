@@ -1,13 +1,37 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock %}
+
+{% block main_class %}auth-terminal{% endblock %}
 
 {% block content %}
-  <section class="auth-card register">
-    <h1>Create your account</h1>
-    <form method="post">
+  <section class="terminal-card">
+    <div class="terminal-corners">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="terminal-header">
+      <div class="terminal-badge">
+        <span>⬡</span>
+      </div>
+      <h1 class="terminal-title">Nexora Access</h1>
+      <div class="terminal-subtitle">// New User Registration //</div>
+    </div>
+    <form method="post" class="terminal-form">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="primary">Register</button>
+      <button type="submit" class="primary">Authorize Access</button>
     </form>
-    <p class="muted">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <div class="terminal-divider">Alternative Authentication</div>
+    <div class="card-actions">
+      <button type="button" class="auth-provider">Google</button>
+      <button type="button" class="auth-provider">GitHub</button>
+    </div>
+    <p class="terminal-footer">Already augmented? <a href="{% url 'login' %}">Sign in</a></p>
   </section>
 {% endblock %}

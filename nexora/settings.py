@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "vibespace.urls"
+ROOT_URLCONF = "nexora.urls"
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "vibespace.wsgi.application"
+WSGI_APPLICATION = "nexora.wsgi.application"
 
 
 # Database
