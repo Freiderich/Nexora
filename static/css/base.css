@@ -1,0 +1,107 @@
+:root {
+  --bg: #f6f1ea;
+  --bg-accent: #f1e7da;
+  --surface: #ffffff;
+  --ink: #1f1b16;
+  --muted: #6a6057;
+  --primary: #c96f3b;
+  --primary-dark: #9d552d;
+  --border: #e6d7c8;
+  --shadow: 0 20px 50px rgba(40, 30, 20, 0.08);
+  --radius: 18px;
+  --max-width: 980px;
+  --font-display: "Playfair Display", "Georgia", serif;
+  --font-body: "Source Sans 3", "Arial", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: radial-gradient(circle at top, var(--bg-accent), var(--bg));
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 14px;
+}
+
+.container {
+  width: min(100% - 32px, var(--max-width));
+  margin: 0 auto;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.inline {
+  display: inline;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.primary:hover {
+  background: var(--primary-dark);
+}
+
+.ghost,
+.link-button {
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.danger {
+  color: #b23a2c;
+  font-weight: 600;
+}
+
+.link-button {
+  padding: 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
