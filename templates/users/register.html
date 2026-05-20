@@ -58,9 +58,24 @@
       <h1 class="terminal-title">Nexora Access</h1>
       <div class="terminal-subtitle">// New User Registration //</div>
     </div>
-    <form method="post" class="terminal-form" id="register-form">
+    <form method="post" class="terminal-form" id="register-form" novalidate>
       {% csrf_token %}
-      {{ form.as_p }}
+      {% if form.is_bound and form.non_field_errors %}
+        <div class="terminal-errors" role="alert">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}
+          {{ field }}
+          {% if form.is_bound and field.errors %}
+            <span class="terminal-error" role="alert">{{ field.errors|striptags }}</span>
+          {% endif %}
+        </p>
+      {% endfor %}
       <button type="submit" class="primary">Authorize Access</button>
     </form>
     <div class="terminal-divider">Alternative Authentication</div>

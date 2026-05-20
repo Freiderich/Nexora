@@ -60,7 +60,7 @@
   position: fixed;
   inset: 0;
   opacity: 0.08;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   animation: hexFade 0.7s ease 0.1s both;
 }
@@ -75,7 +75,8 @@
   inset: 0;
   background: radial-gradient(circle at 20% 20%, rgba(240, 180, 41, 0.08), transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(240, 180, 41, 0.12), transparent 50%);
-  z-index: 1;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .terminal-card {
@@ -192,6 +193,12 @@
   gap: 8px;
 }
 
+.terminal-form p {
+  margin: 0 0 16px;
+  display: grid;
+  gap: 8px;
+}
+
 .terminal-form label::before {
   content: "";
   width: 6px;
@@ -210,6 +217,53 @@
 
 .terminal-form input::placeholder {
   color: rgba(240, 180, 41, 0.35);
+}
+
+.terminal-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #f8d36b;
+  background: rgba(240, 180, 41, 0.12);
+  border: 1px solid rgba(240, 180, 41, 0.35);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.terminal-error::before {
+  content: "!";
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(240, 180, 41, 0.2);
+  border: 1px solid rgba(240, 180, 41, 0.6);
+  color: #f0b429;
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.terminal-errors {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(240, 180, 41, 0.45);
+  border-radius: 16px;
+  background: rgba(10, 10, 12, 0.92);
+  color: #f7e7b5;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  display: grid;
+  gap: 8px;
+  box-shadow: inset 0 0 20px rgba(240, 180, 41, 0.15);
+}
+
+.terminal-errors p {
+  margin: 0;
 }
 
 .terminal-form .primary {
