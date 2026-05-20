@@ -15,6 +15,8 @@
 .register-body::before {
   background: #050505;
   z-index: 0;
+  opacity: 0;
+  animation: bgFade 0.45s ease forwards;
 }
 
 .register-body::after {
@@ -22,6 +24,7 @@
   background-size: 60px 52px;
   opacity: 0.2;
   z-index: 1;
+  animation: gridFade 0.65s ease 0.05s both;
 }
 
 .register-body main.container {
@@ -50,6 +53,7 @@
   width: 100%;
   color: #f7e7b5;
   z-index: 2;
+  animation: terminalReveal 0.6s ease 0.05s both;
 }
 
 .terminal-hex {
@@ -58,6 +62,7 @@
   opacity: 0.08;
   z-index: 1;
   pointer-events: none;
+  animation: hexFade 0.7s ease 0.1s both;
 }
 
 .hex-grid {
@@ -81,6 +86,8 @@
   padding: 32px 28px 28px;
   position: relative;
   box-shadow: 0 24px 60px rgba(240, 180, 41, 0.1);
+  animation: cardIntro 0.6s ease 0.15s both;
+  will-change: transform, opacity;
 }
 
 .terminal-card::before,
@@ -240,6 +247,60 @@
   to {
     opacity: 0.2;
     transform: translateY(-6px);
+  }
+}
+
+@keyframes bgFade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gridFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
+@keyframes hexFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.08;
+  }
+}
+
+@keyframes terminalReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cardIntro {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register-body::before,
+  .register-body::after,
+  .terminal-hex,
+  .auth-terminal,
+  .terminal-card {
+    animation: none;
   }
 }
 
