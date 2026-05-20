@@ -5,10 +5,46 @@
   <link rel="stylesheet" href="{% static 'css/register.css' %}" />
 {% endblock %}
 
+{% block body_class %}register-body{% endblock %}
+
 {% block main_class %}auth-terminal{% endblock %}
 
 {% block content %}
-  <section class="terminal-card">
+  <div class="terminal-hex">
+    <svg class="hex-grid" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern
+          id="hexagons"
+          width="50"
+          height="43.4"
+          patternUnits="userSpaceOnUse"
+          patternTransform="scale(2)"
+        >
+          <polygon
+            points="24.8,22 37.3,29.2 37.3,43.7 24.8,50.9 12.3,43.7 12.3,29.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="0,0 12.5,7.2 12.5,21.7 0,28.9 -12.5,21.7 -12.5,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="49.6,0 62.1,7.2 62.1,21.7 49.6,28.9 37.1,21.7 37.1,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hexagons)" />
+    </svg>
+  </div>
+  <div class="terminal-accent"></div>
+  <section class="terminal-card" id="terminal-card">
     <div class="terminal-corners">
       <span></span>
       <span></span>
@@ -22,7 +58,7 @@
       <h1 class="terminal-title">Nexora Access</h1>
       <div class="terminal-subtitle">// New User Registration //</div>
     </div>
-    <form method="post" class="terminal-form">
+    <form method="post" class="terminal-form" id="register-form">
       {% csrf_token %}
       {{ form.as_p }}
       <button type="submit" class="primary">Authorize Access</button>
@@ -34,4 +70,13 @@
     </div>
     <p class="terminal-footer">Already augmented? <a href="{% url 'login' %}">Sign in</a></p>
   </section>
+  <div class="terminal-fade" aria-hidden="true"></div>
+  <script>
+    const registerForm = document.getElementById("register-form");
+    if (registerForm) {
+      registerForm.addEventListener("submit", () => {
+        document.body.classList.add("register-submitting");
+      });
+    }
+  </script>
 {% endblock %}

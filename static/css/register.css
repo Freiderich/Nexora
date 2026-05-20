@@ -1,8 +1,29 @@
+.register-body {
+  background: #050505;
+}
+
+.register-body main.container {
+  width: 100%;
+  max-width: none;
+}
+
+.register-body .site-header,
+.register-body .menu a,
+.register-body .logo {
+  background: transparent;
+  color: #f7e7b5;
+}
+
+.register-body .site-header {
+  border-bottom: 1px solid rgba(240, 180, 41, 0.2);
+}
+
 .auth-terminal {
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 120px);
   display: grid;
   place-items: center;
   position: relative;
+  width: 100%;
   color: #f7e7b5;
 }
 
@@ -21,6 +42,27 @@
   background-image: radial-gradient(#f0b4291a 1px, transparent 1px);
   background-size: 60px 52px;
   opacity: 0.2;
+  z-index: -1;
+}
+
+.terminal-hex {
+  position: absolute;
+  inset: -80px 0 0;
+  opacity: 0.08;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hex-grid {
+  width: 100%;
+  height: 100%;
+}
+
+.terminal-accent {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(240, 180, 41, 0.08), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(240, 180, 41, 0.12), transparent 50%);
   z-index: -1;
 }
 
@@ -163,6 +205,35 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.75rem;
+}
+
+.terminal-form .primary:active {
+  transform: translateY(1px);
+}
+
+.terminal-fade {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 999;
+}
+
+.register-submitting .terminal-fade {
+  opacity: 1;
+}
+
+.register-submitting #terminal-card {
+  animation: fadeCard 0.4s ease forwards;
+}
+
+@keyframes fadeCard {
+  to {
+    opacity: 0.2;
+    transform: translateY(-6px);
+  }
 }
 
 .terminal-divider {
