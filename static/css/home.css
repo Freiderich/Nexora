@@ -1,0 +1,190 @@
+.home-body::before,
+.home-body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home-body::before {
+  background: #050505;
+  z-index: 0;
+  opacity: 0;
+  animation: bgFade 0.45s ease forwards;
+}
+
+.home-body::after {
+  background-image: radial-gradient(#f0b4291a 1px, transparent 1px);
+  background-size: 60px 52px;
+  opacity: 0.2;
+  z-index: 1;
+  animation: gridFade 0.65s ease 0.05s both;
+}
+
+.home-body main.container {
+  width: 100%;
+  max-width: none;
+}
+
+.home-body .site-header,
+.home-body .menu a,
+.home-body .logo {
+  background: transparent;
+  color: #f7e7b5;
+}
+
+.home-body .site-header {
+  border-bottom: 1px solid rgba(240, 180, 41, 0.2);
+  position: relative;
+  z-index: 3;
+}
+
+.home-terminal {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  gap: 28px;
+  position: relative;
+  width: 100%;
+  color: #f7e7b5;
+  z-index: 2;
+  padding-bottom: 60px;
+}
+
+.home-hero {
+  width: min(100% - 48px, 980px);
+  margin: 40px auto 10px;
+  border-radius: 26px;
+  border: 1px solid rgba(240, 180, 41, 0.25);
+  background: rgba(7, 7, 9, 0.9);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  animation: cardIntro 0.6s ease 0.1s both;
+}
+
+.home-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.65rem;
+  color: rgba(240, 180, 41, 0.6);
+  margin: 0 0 8px;
+}
+
+.home-title {
+  font-family: "Playfair Display", "Georgia", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  margin: 0 0 10px;
+  color: #f0b429;
+}
+
+.home-subtitle {
+  margin: 0;
+  color: rgba(247, 231, 181, 0.72);
+}
+
+.home-hero .primary {
+  background: linear-gradient(135deg, #f0b429, #ffb24a);
+  color: #1a1305;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  padding: 12px 22px;
+}
+
+.home-feed {
+  width: min(100% - 48px, 980px);
+  margin: 0 auto 80px;
+}
+
+.home-card {
+  width: 100%;
+  border-radius: 22px;
+  background: rgba(7, 7, 9, 0.92);
+  border: 1px solid rgba(240, 180, 41, 0.35);
+  color: #f7e7b5;
+  box-shadow: 0 24px 60px rgba(240, 180, 41, 0.08);
+}
+
+.home-card .card-header {
+  margin-bottom: 8px;
+}
+
+.home-card a {
+  color: #f7e7b5;
+}
+
+.home-card .muted {
+  color: rgba(247, 231, 181, 0.65);
+}
+
+.home-card .ghost {
+  color: rgba(247, 231, 181, 0.75);
+  border: 1px solid rgba(240, 180, 41, 0.3);
+}
+
+.home-card .danger {
+  color: #f8d36b;
+}
+
+.home-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: rgba(240, 180, 41, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.6rem;
+}
+
+.home-card-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-card-label::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #f0b429;
+  transform: rotate(45deg);
+}
+
+.home-card-date {
+  font-size: 0.55rem;
+}
+
+.home-card .card-actions a,
+.home-card .card-actions button {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.home-card .post-image {
+  border-radius: 16px;
+  border: 1px solid rgba(240, 180, 41, 0.2);
+}
+
+@media (max-width: 900px) {
+  .home-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .home-hero,
+  .home-feed {
+    width: min(100% - 32px, 960px);
+  }
+
+  .home-hero {
+    padding: 24px;
+  }
+}

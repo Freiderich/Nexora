@@ -2,22 +2,58 @@
 {% load static %}
 
 {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
   <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
 {% endblock %}
 
-{% block main_class %}landing{% endblock %}
+{% block body_class %}landing-body{% endblock %}
+
+{% block main_class %}landing-terminal{% endblock %}
 
 {% block content %}
+  <div class="terminal-hex">
+    <svg class="hex-grid" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern
+          id="hexagons-landing"
+          width="50"
+          height="43.4"
+          patternUnits="userSpaceOnUse"
+          patternTransform="scale(2)"
+        >
+          <polygon
+            points="24.8,22 37.3,29.2 37.3,43.7 24.8,50.9 12.3,43.7 12.3,29.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="0,0 12.5,7.2 12.5,21.7 0,28.9 -12.5,21.7 -12.5,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="49.6,0 62.1,7.2 62.1,21.7 49.6,28.9 37.1,21.7 37.1,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hexagons-landing)" />
+    </svg>
+  </div>
+  <div class="terminal-accent"></div>
   <section class="landing-hero">
     <div class="landing-copy">
-      <p class="eyebrow">Nexora</p>
-      <h1>Share moments. Build your vibe.</h1>
-      <p class="muted">
-        A minimalist social space to post what matters now and keep the conversation
-        moving.
+      <p class="landing-eyebrow">Nexora Protocol</p>
+      <h1>Share moments. Build your signal.</h1>
+      <p class="landing-subtitle">
+        A secure space to post what matters now and keep the conversation moving.
       </p>
       <div class="landing-actions">
-        <a class="primary" href="{% url 'register' %}">Create account</a>
+        <a class="primary" href="{% url 'register' %}">Request Access</a>
         <a class="ghost" href="{% url 'login' %}">Sign in</a>
       </div>
     </div>
@@ -30,7 +66,7 @@
             <span class="dot"></span>
           </div>
           <div class="mock-content">
-            <div class="pill">Live now</div>
+            <div class="pill">Live signal</div>
             <h3>Tonight’s vibe</h3>
             <p>Small moments, big energy.</p>
           </div>
@@ -55,7 +91,7 @@
   <section class="landing-strip">
     <div>
       <h2>Built for short, real updates.</h2>
-      <p class="muted">Post, like, comment, and keep moving with your people.</p>
+      <p class="landing-subtitle">Post, like, comment, and keep moving with your crew.</p>
     </div>
     <a class="primary" href="{% url 'register' %}">Join Nexora</a>
   </section>

@@ -1,5 +1,7 @@
 .register-body,
-.login-body {
+.login-body,
+.home-body,
+.landing-body {
   background: #050505;
   position: relative;
   overflow-x: hidden;
@@ -8,7 +10,11 @@
 .register-body::before,
 .register-body::after,
 .login-body::before,
-.login-body::after {
+.login-body::after,
+.home-body::before,
+.home-body::after,
+.landing-body::before,
+.landing-body::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -16,7 +22,9 @@
 }
 
 .register-body::before,
-.login-body::before {
+.login-body::before,
+.home-body::before,
+.landing-body::before {
   background: #050505;
   z-index: 0;
   opacity: 0;
@@ -24,7 +32,9 @@
 }
 
 .register-body::after,
-.login-body::after {
+.login-body::after,
+.home-body::after,
+.landing-body::after {
   background-image: radial-gradient(#f0b4291a 1px, transparent 1px);
   background-size: 60px 52px;
   opacity: 0.2;
@@ -33,7 +43,9 @@
 }
 
 .register-body main.container,
-.login-body main.container {
+.login-body main.container,
+.home-body main.container,
+.landing-body main.container {
   width: 100%;
   max-width: none;
 }
@@ -43,13 +55,21 @@
 .register-body .logo,
 .login-body .site-header,
 .login-body .menu a,
-.login-body .logo {
+.login-body .logo,
+.home-body .site-header,
+.home-body .menu a,
+.home-body .logo,
+.landing-body .site-header,
+.landing-body .menu a,
+.landing-body .logo {
   background: transparent;
   color: #f7e7b5;
 }
 
 .register-body .site-header,
-.login-body .site-header {
+.login-body .site-header,
+.home-body .site-header,
+.landing-body .site-header {
   border-bottom: 1px solid rgba(240, 180, 41, 0.2);
   position: relative;
   z-index: 3;
