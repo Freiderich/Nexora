@@ -70,7 +70,22 @@
       {% for field in form %}
         <p>
           {{ field.label_tag }}
-          {{ field }}
+          {% if field.name == "password1" or field.name == "password2" %}
+            <div class="terminal-input">
+              {{ field }}
+              <button
+                type="button"
+                class="password-toggle"
+                data-target="{{ field.id_for_label }}"
+                aria-pressed="false"
+                aria-label="Show password"
+              >
+                <span class="eye-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+          {% else %}
+            {{ field }}
+          {% endif %}
           {% if form.is_bound and field.errors %}
             <span class="terminal-error" role="alert">{{ field.errors|striptags }}</span>
           {% endif %}
@@ -93,5 +108,22 @@
         document.body.classList.add("register-submitting");
       });
     }
+
+    document.querySelectorAll(".password-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetId = button.getAttribute("data-target");
+        const input = document.getElementById(targetId);
+        if (!input) {
+          return;
+        }
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        button.setAttribute("aria-pressed", isHidden ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          isHidden ? "Hide password" : "Show password"
+        );
+      });
+    });
   </script>
 {% endblock %}
