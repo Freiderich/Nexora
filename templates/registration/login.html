@@ -1,13 +1,125 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock %}
+
+{% block body_class %}login-body{% endblock %}
+
+{% block main_class %}auth-terminal{% endblock %}
 
 {% block content %}
-  <section class="auth-card">
-    <h1>Welcome back</h1>
-    <form method="post">
+  <div class="terminal-hex">
+    <svg class="hex-grid" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern
+          id="hexagons-login"
+          width="50"
+          height="43.4"
+          patternUnits="userSpaceOnUse"
+          patternTransform="scale(2)"
+        >
+          <polygon
+            points="24.8,22 37.3,29.2 37.3,43.7 24.8,50.9 12.3,43.7 12.3,29.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="0,0 12.5,7.2 12.5,21.7 0,28.9 -12.5,21.7 -12.5,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+          <polygon
+            points="49.6,0 62.1,7.2 62.1,21.7 49.6,28.9 37.1,21.7 37.1,7.2"
+            fill="none"
+            stroke="#d4a024"
+            stroke-width="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hexagons-login)" />
+    </svg>
+  </div>
+  <div class="terminal-accent"></div>
+  <section class="terminal-card" id="terminal-card">
+    <div class="terminal-corners">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="terminal-header">
+      <div class="terminal-badge">
+        <span>⬡</span>
+      </div>
+      <h1 class="terminal-title">Nexora Access</h1>
+      <div class="terminal-subtitle">// Secure Login //</div>
+    </div>
+    <form method="post" class="terminal-form" id="login-form" novalidate>
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="primary">Login</button>
+      {% if form.is_bound and form.non_field_errors %}
+        <div class="terminal-errors" role="alert">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}
+          {% if field.name == "password" %}
+            <div class="terminal-input">
+              {{ field }}
+              <button
+                type="button"
+                class="password-toggle"
+                data-target="{{ field.id_for_label }}"
+                aria-pressed="false"
+                aria-label="Show password"
+              >
+                <span class="eye-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+          {% else %}
+            {{ field }}
+          {% endif %}
+          {% if form.is_bound and field.errors %}
+            <span class="terminal-error" role="alert">{{ field.errors|striptags }}</span>
+          {% endif %}
+        </p>
+      {% endfor %}
+      <button type="submit" class="primary">Authorize Access</button>
     </form>
-    <p class="muted">New here? <a href="{% url 'register' %}">Create an account</a></p>
+    <div class="terminal-divider">New Here</div>
+    <p class="terminal-footer">Need access? <a href="{% url 'register' %}">Create account</a></p>
   </section>
+  <div class="terminal-fade" aria-hidden="true"></div>
+  <script>
+    const loginForm = document.getElementById("login-form");
+    if (loginForm) {
+      loginForm.addEventListener("submit", () => {
+        document.body.classList.add("auth-submitting");
+      });
+    }
+
+    document.querySelectorAll(".password-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetId = button.getAttribute("data-target");
+        const input = document.getElementById(targetId);
+        if (!input) {
+          return;
+        }
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        button.setAttribute("aria-pressed", isHidden ? "true" : "false");
+        button.setAttribute(
+          "aria-label",
+          isHidden ? "Hide password" : "Show password"
+        );
+      });
+    });
+  </script>
 {% endblock %}

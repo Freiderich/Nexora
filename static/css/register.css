@@ -1,25 +1,30 @@
-.register-body {
+.register-body,
+.login-body {
   background: #050505;
   position: relative;
   overflow-x: hidden;
 }
 
 .register-body::before,
-.register-body::after {
+.register-body::after,
+.login-body::before,
+.login-body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
 }
 
-.register-body::before {
+.register-body::before,
+.login-body::before {
   background: #050505;
   z-index: 0;
   opacity: 0;
   animation: bgFade 0.45s ease forwards;
 }
 
-.register-body::after {
+.register-body::after,
+.login-body::after {
   background-image: radial-gradient(#f0b4291a 1px, transparent 1px);
   background-size: 60px 52px;
   opacity: 0.2;
@@ -27,19 +32,24 @@
   animation: gridFade 0.65s ease 0.05s both;
 }
 
-.register-body main.container {
+.register-body main.container,
+.login-body main.container {
   width: 100%;
   max-width: none;
 }
 
 .register-body .site-header,
 .register-body .menu a,
-.register-body .logo {
+.register-body .logo,
+.login-body .site-header,
+.login-body .menu a,
+.login-body .logo {
   background: transparent;
   color: #f7e7b5;
 }
 
-.register-body .site-header {
+.register-body .site-header,
+.login-body .site-header {
   border-bottom: 1px solid rgba(240, 180, 41, 0.2);
   position: relative;
   z-index: 3;
@@ -349,11 +359,11 @@
   z-index: 999;
 }
 
-.register-submitting .terminal-fade {
+.auth-submitting .terminal-fade {
   opacity: 1;
 }
 
-.register-submitting #terminal-card {
+.auth-submitting #terminal-card {
   animation: fadeCard 0.4s ease forwards;
 }
 
