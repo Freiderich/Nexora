@@ -41,8 +41,121 @@
     </div>
     <form method="post" enctype="multipart/form-data" class="terminal-form post-form">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="primary">Save Signal</button>
+      <div class="post-layout">
+        <aside class="post-rail post-rail-left" aria-hidden="true">
+          <div class="rail-panel">
+            <div class="rail-title">Channel</div>
+            <span class="rail-chip">NEX-01</span>
+            <span class="rail-chip">Public Feed</span>
+          </div>
+          <div class="rail-panel">
+            <div class="rail-title">Encryption</div>
+            <div class="rail-meter">
+              <span class="rail-dot active"></span>
+              <span class="rail-dot active"></span>
+              <span class="rail-dot active"></span>
+              <span class="rail-dot"></span>
+              <span class="rail-dot"></span>
+            </div>
+            <div class="rail-sub">Cipher Ready</div>
+          </div>
+          <div class="rail-panel">
+            <div class="rail-title">Uplink</div>
+            <div class="rail-sub">Orbital Relay</div>
+            <div class="rail-sub rail-muted">Sync: 12.4 ms</div>
+          </div>
+        </aside>
+
+        <div class="post-core">
+          <div class="post-callout">
+            <div class="post-callout-head">
+              <span class="post-callout-label">Transmission</span>
+              <span class="post-status" id="post-status">Status: Idle</span>
+            </div>
+            <span class="post-callout-copy">Broadcast a new signal into the feed.</span>
+            <div class="post-meter" aria-hidden="true">
+              <div class="post-meter-track">
+                <div class="post-meter-fill" id="post-meter-fill"></div>
+              </div>
+              <span class="post-meter-label" id="post-meter-label">Signal Strength: 0%</span>
+            </div>
+          </div>
+
+          <p>
+            <label for="{{ form.content.id_for_label }}">Message</label>
+            {{ form.content }}
+          </p>
+
+          <p>
+            <label for="{{ form.image.id_for_label }}">Attachment</label>
+            <div class="file-control">
+              {{ form.image }}
+              <label class="file-trigger" for="{{ form.image.id_for_label }}">
+                <span class="file-icon" aria-hidden="true"></span>
+                Choose File
+              </label>
+            </div>
+          </p>
+          <button type="submit" class="primary">Save Signal</button>
+        </div>
+
+        <aside class="post-rail post-rail-right" aria-hidden="true">
+          <div class="rail-panel">
+            <div class="rail-title">Queue</div>
+            <div class="rail-list">
+              <span>Packet 17</span>
+              <span>Packet 18</span>
+              <span>Packet 19</span>
+            </div>
+          </div>
+          <div class="rail-panel">
+            <div class="rail-title">Latency</div>
+            <span class="rail-chip">0.12 s</span>
+            <div class="rail-sub rail-muted">Stable</div>
+          </div>
+          <div class="rail-panel">
+            <div class="rail-title">Trace ID</div>
+            <div class="rail-code">NX-04A-9C</div>
+          </div>
+        </aside>
+      </div>
     </form>
   </section>
+  <script>
+    const postMessage = document.getElementById("{{ form.content.id_for_label }}");
+    const meterFill = document.getElementById("post-meter-fill");
+    const meterLabel = document.getElementById("post-meter-label");
+    const statusLine = document.getElementById("post-status");
+    const maxSignal = 240;
+
+    const updateSignal = () => {
+      if (!postMessage) {
+        return;
+      }
+      const length = postMessage.value.length;
+      const percent = Math.min(Math.round((length / maxSignal) * 100), 100);
+      if (meterFill) {
+        meterFill.style.width = `${percent}%`;
+      }
+      if (meterLabel) {
+        meterLabel.textContent = `Signal Strength: ${percent}%`;
+      }
+      if (statusLine) {
+        if (length === 0) {
+          statusLine.textContent = "Status: Idle";
+        } else if (percent < 35) {
+          statusLine.textContent = "Status: Low Signal";
+        } else if (percent < 75) {
+          statusLine.textContent = "Status: Stable";
+        } else {
+          statusLine.textContent = "Status: Strong";
+        }
+      }
+    };
+
+    if (postMessage) {
+      postMessage.addEventListener("input", updateSignal);
+      updateSignal();
+    }
+  </script>
 {% endblock %}

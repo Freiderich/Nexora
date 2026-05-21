@@ -39,6 +39,10 @@
   margin: 0 auto;
 }
 
+.profile-edit-card {
+  max-width: 720px;
+}
+
 .profile-hero {
   display: grid;
   grid-template-columns: 120px 1fr;
