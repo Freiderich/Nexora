@@ -7,7 +7,7 @@
 }
 
 .home-body::before {
-  background: #050505;
+  background: #050504;
   z-index: 0;
   opacity: 0;
   animation: bgFade 0.45s ease forwards;
@@ -30,7 +30,7 @@
 .home-body .menu a,
 .home-body .logo {
   background: transparent;
-  color: #f7e7b5;
+  color: #f7e7b4;
 }
 
 .home-body .site-header {
