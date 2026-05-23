@@ -42,5 +42,24 @@
       {% endif %}
       {% block content %}{% endblock %}
     </main>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll(".post-menu").forEach((menu) => {
+          const wrap = menu.closest(".post-menu-wrap");
+          const toggle = wrap && wrap.querySelector(".post-menu-toggle");
+          const isOpen = wrap && wrap.dataset.open === "true";
+          if (toggle && !wrap.contains(event.target)) {
+            menu.hidden = true;
+            wrap.dataset.open = "false";
+            toggle.setAttribute("aria-expanded", "false");
+          } else if (toggle && wrap.contains(event.target) && event.target === toggle) {
+            const next = !isOpen;
+            menu.hidden = !next;
+            wrap.dataset.open = String(next);
+            toggle.setAttribute("aria-expanded", String(next));
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.post-meta-line {
+  margin-bottom: 10px;
+}
+
 .post-layout {
   display: grid;
   grid-template-columns: minmax(140px, 180px) minmax(0, 1fr) minmax(140px, 180px);

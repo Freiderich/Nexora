@@ -6,9 +6,10 @@ from .models import Comment, Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["content", "image"]
+        fields = ["content", "image", "visibility"]
         widgets = {
             "content": forms.Textarea(attrs={"rows": 4}),
+            "visibility": forms.Select(),
         }
 
 

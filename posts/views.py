@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentForm, PostForm
-from .models import Comment, Like, Post
+from .models import Comment, Like, Post, Reaction
 
 
 def home(request):
@@ -12,7 +12,16 @@ def home(request):
     posts = (
         Post.objects.select_related("author", "author__profile")
         .prefetch_related("comments", "likes")
-        .annotate(likes_count=Count("likes"))
+        .exclude(visibility=Post.VISIBILITY_PRIVATE)
+        .annotate(
+            likes_count=Count("likes"),
+            reactions_count=Count("reactions"),
+            reaction_love_count=Count("reactions", filter=Q(reactions__kind="love")),
+            reaction_laugh_count=Count("reactions", filter=Q(reactions__kind="laugh")),
+            reaction_wow_count=Count("reactions", filter=Q(reactions__kind="wow")),
+            reaction_sad_count=Count("reactions", filter=Q(reactions__kind="sad")),
+            reaction_fire_count=Count("reactions", filter=Q(reactions__kind="fire")),
+        )
     )
     return render(request, "posts/home.html", {"posts": posts})
 
@@ -20,10 +29,18 @@ def home(request):
 def post_detail(request, post_id):
     post = get_object_or_404(
         Post.objects.select_related("author", "author__profile").annotate(
-            likes_count=Count("likes")
+            likes_count=Count("likes"),
+            reactions_count=Count("reactions"),
+            reaction_love_count=Count("reactions", filter=Q(reactions__kind="love")),
+            reaction_laugh_count=Count("reactions", filter=Q(reactions__kind="laugh")),
+            reaction_wow_count=Count("reactions", filter=Q(reactions__kind="wow")),
+            reaction_sad_count=Count("reactions", filter=Q(reactions__kind="sad")),
+            reaction_fire_count=Count("reactions", filter=Q(reactions__kind="fire")),
         ),
         id=post_id,
     )
+    if post.visibility == Post.VISIBILITY_PRIVATE and request.user != post.author:
+        return redirect("home")
     comments = post.comments.select_related("author", "author__profile")
     form = CommentForm()
     return render(
@@ -97,6 +114,37 @@ def toggle_like(request, post_id):
     like, created = Like.objects.get_or_create(post=post, user=request.user)
     if not created:
         like.delete()
+    return redirect(request.META.get("HTTP_REFERER", "home"))
+
+
+@login_required
+def set_visibility(request, post_id, visibility):
+    post = get_object_or_404(Post, id=post_id, author=request.user)
+    allowed = {choice[0] for choice in Post.VISIBILITY_CHOICES}
+    if visibility in allowed:
+        post.visibility = visibility
+        post.save(update_fields=["visibility", "updated_at"])
+    return redirect(request.META.get("HTTP_REFERER", "home"))
+
+
+@login_required
+def add_reaction(request, post_id, kind):
+    post = get_object_or_404(Post, id=post_id)
+    allowed = {choice[0] for choice in Reaction.REACTION_CHOICES}
+    if kind not in allowed:
+        return redirect(request.META.get("HTTP_REFERER", "home"))
+
+    reaction, created = Reaction.objects.get_or_create(
+        post=post,
+        user=request.user,
+        defaults={"kind": kind},
+    )
+    if not created:
+        if reaction.kind == kind:
+            reaction.delete()
+        else:
+            reaction.kind = kind
+            reaction.save(update_fields=["kind"])
     return redirect(request.META.get("HTTP_REFERER", "home"))
 
 # Create your views here.

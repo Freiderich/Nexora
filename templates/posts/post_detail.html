@@ -1,26 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% with post_visibility=post.get_visibility_display %}
   <section class="card detail">
     <div class="card-header">
       <a href="{% url 'profile' username=post.author.username %}">@{{ post.author.username }}</a>
-      <span class="muted">{{ post.created_at|date:"M d, Y" }}</span>
+      <div class="post-menu-wrap">
+        <button class="post-menu-toggle" type="button" aria-label="Post options" aria-expanded="false">...</button>
+        <div class="post-menu" hidden>
+          <div class="post-menu-head">
+            <span>Visibility</span>
+            <span class="post-visibility-tag">{{ post_visibility }}</span>
+          </div>
+          {% if user == post.author %}
+            <a href="{% url 'set_visibility' post_id=post.id visibility='public' %}">Public</a>
+            <a href="{% url 'set_visibility' post_id=post.id visibility='unlisted' %}">Unlisted</a>
+            <a href="{% url 'set_visibility' post_id=post.id visibility='private' %}">Private</a>
+            <hr />
+            <a href="{% url 'post_edit' post_id=post.id %}">Edit post</a>
+            <a class="danger" href="{% url 'post_delete' post_id=post.id %}">Delete post</a>
+          {% else %}
+            <span class="post-menu-muted">Visible to {{ post_visibility|lower }}</span>
+          {% endif %}
+        </div>
+      </div>
     </div>
+    <div class="post-meta-line"><span class="muted">{{ post.created_at|date:"M d, Y" }}</span></div>
     <p>{{ post.content }}</p>
     {% if post.image %}
       <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
     {% endif %}
-    <div class="card-actions">
+    <div class="post-reactions">
       <form method="post" action="{% url 'toggle_like' post_id=post.id %}">
         {% csrf_token %}
         <button type="submit" class="ghost">❤ {{ post.likes_count }}</button>
       </form>
-      {% if user == post.author %}
-        <a href="{% url 'post_edit' post_id=post.id %}">Edit</a>
-        <a class="danger" href="{% url 'post_delete' post_id=post.id %}">Delete</a>
-      {% endif %}
+      <form method="post" action="{% url 'add_reaction' post_id=post.id kind='love' %}">{% csrf_token %}<button type="submit" class="reaction-chip">❤ {{ post.reaction_love_count }}</button></form>
+      <form method="post" action="{% url 'add_reaction' post_id=post.id kind='laugh' %}">{% csrf_token %}<button type="submit" class="reaction-chip">😂 {{ post.reaction_laugh_count }}</button></form>
+      <form method="post" action="{% url 'add_reaction' post_id=post.id kind='wow' %}">{% csrf_token %}<button type="submit" class="reaction-chip">😮 {{ post.reaction_wow_count }}</button></form>
+      <form method="post" action="{% url 'add_reaction' post_id=post.id kind='sad' %}">{% csrf_token %}<button type="submit" class="reaction-chip">😢 {{ post.reaction_sad_count }}</button></form>
+      <form method="post" action="{% url 'add_reaction' post_id=post.id kind='fire' %}">{% csrf_token %}<button type="submit" class="reaction-chip">🔥 {{ post.reaction_fire_count }}</button></form>
     </div>
   </section>
+  {% endwith %}
 
   <section class="comments">
     <h2>Comments</h2>
