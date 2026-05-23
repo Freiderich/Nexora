@@ -55,7 +55,7 @@
 
       document.addEventListener("submit", async (event) => {
         const form = event.target;
-        if (!form.matches(".reaction-picker form, .post-actions form, .post-reactions form")) return;
+        if (!form.matches(".reaction-picker form, .post-actions form, .post-reactions form, .comment-form")) return;
         event.preventDefault();
         try {
           const response = await fetch(form.action, {
@@ -68,13 +68,76 @@
           });
           if (!response.ok) return;
           const data = await response.json();
-          if (data.ok) updateReactionCounts(form, data);
+          if (data.ok) {
+            updateReactionCounts(form, data);
+            if (form.classList.contains("comment-form")) {
+              const input = form.querySelector(".comment-input");
+              if (input) input.value = "";
+              if (data.comment) appendInlineComment(form, data.comment, data.comments_count);
+            }
+          }
         } catch (error) {
           console.error(error);
         }
       });
 
+      const escapeHtml = (value) => {
+        const div = document.createElement("div");
+        div.textContent = value ?? "";
+        return div.innerHTML;
+      };
+
+      const appendInlineComment = (form, comment, commentsCount) => {
+        const card = form.closest(".card");
+        if (!card) return;
+        const list = card.querySelector("[data-comment-list]");
+        if (!list) return;
+        const empty = list.querySelector(".muted");
+        if (empty && empty.textContent.trim() === "No comments yet.") empty.remove();
+        const item = document.createElement("div");
+        item.className = "comment inline-comment";
+        item.innerHTML = `
+          <div class="comment-meta">
+            <a href="${escapeHtml(comment.author_url)}">@${escapeHtml(comment.author)}</a>
+            <span class="muted">${escapeHtml(comment.created_at)}</span>
+          </div>
+          <p>${escapeHtml(comment.body)}</p>
+        `;
+        list.prepend(item);
+        const items = list.querySelectorAll(".inline-comment");
+        if (items.length > 3) items[items.length - 1].remove();
+        const count = card.querySelector(".comment-action");
+        if (count && commentsCount !== undefined) count.lastChild.textContent = ` ${commentsCount}`;
+      };
+
       document.addEventListener("click", (event) => {
+        const commentToggle = event.target.closest?.("[data-comment-toggle]");
+        if (commentToggle) {
+          event.preventDefault();
+          const targetId = commentToggle.getAttribute("data-comment-target");
+          const wrapper = targetId && document.getElementById(targetId);
+          if (wrapper) {
+            const nextHidden = wrapper.hasAttribute("hidden") ? false : true;
+            if (nextHidden) {
+              wrapper.setAttribute("hidden", "");
+            } else {
+              wrapper.removeAttribute("hidden");
+              wrapper.scrollIntoView({ behavior: "smooth", block: "nearest" });
+              const input = wrapper.querySelector(".comment-input");
+              if (input) requestAnimationFrame(() => input.focus());
+            }
+          }
+          return;
+        }
+
+        const commentJump = event.target.closest?.("[data-comment-jump]");
+        if (commentJump) {
+          const target = document.querySelector("#comment-form .comment-input");
+          if (target) {
+            requestAnimationFrame(() => target.focus());
+          }
+        }
+
         document.querySelectorAll(".post-menu").forEach((menu) => {
           const wrap = menu.closest(".post-menu-wrap");
           const toggle = wrap && wrap.querySelector(".post-menu-toggle");

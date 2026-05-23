@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q
+from django.db.models import Count, Prefetch, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils import timezone
 
 from .forms import CommentForm, PostForm
 from .models import Comment, Like, Post, Reaction
@@ -29,9 +31,10 @@ def _is_ajax(request):
 def home(request):
     if not request.user.is_authenticated:
         return render(request, "posts/landing.html")
+    comment_qs = Comment.objects.select_related("author", "author__profile")
     posts = (
         Post.objects.select_related("author", "author__profile")
-        .prefetch_related("comments", "likes")
+        .prefetch_related(Prefetch("comments", queryset=comment_qs), "likes")
         .exclude(visibility=Post.VISIBILITY_PRIVATE)
         .annotate(
             likes_count=Count("likes"),
@@ -116,6 +119,31 @@ def comment_create(request, post_id):
             comment.post = post
             comment.author = request.user
             comment.save()
+            if _is_ajax(request):
+                created_at = timezone.localtime(comment.created_at)
+                return JsonResponse(
+                    {
+                        "ok": True,
+                        "comments_count": post.comments.count(),
+                        "comment": {
+                            "id": comment.id,
+                            "author": comment.author.username,
+                            "author_url": reverse(
+                                "profile", kwargs={"username": comment.author.username}
+                            ),
+                            "body": comment.body,
+                            "created_at": created_at.strftime("%b %d, %Y"),
+                            "can_delete": True,
+                            "delete_url": reverse(
+                                "comment_delete", kwargs={"comment_id": comment.id}
+                            ),
+                        },
+                    }
+                )
+        elif _is_ajax(request):
+            return JsonResponse({"ok": False, "errors": form.errors}, status=400)
+    if _is_ajax(request):
+        return JsonResponse({"ok": False}, status=405)
     return redirect("post_detail", post_id=post.id)
 
 

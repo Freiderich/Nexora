@@ -1,11 +1,11 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Count, Q
+from django.db.models import Count, Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ProfileForm, RegisterForm
-from posts.models import Post
+from posts.models import Comment, Post
 
 
 def register(request):
@@ -23,7 +23,11 @@ def register(request):
 @login_required
 def profile(request, username):
     user = get_object_or_404(User, username=username)
-    posts = user.posts.select_related("author", "author__profile").prefetch_related("comments", "likes")
+    comment_qs = Comment.objects.select_related("author", "author__profile")
+    posts = (
+        user.posts.select_related("author", "author__profile")
+        .prefetch_related(Prefetch("comments", queryset=comment_qs), "likes")
+    )
     if request.user != user:
         posts = posts.exclude(visibility=Post.VISIBILITY_PRIVATE)
     posts = posts.annotate(

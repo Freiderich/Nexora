@@ -4,6 +4,90 @@
   margin: 0 auto;
 }
 
+.comment-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 180, 41, 0.25);
+  color: #f7e7b5;
+  background: rgba(10, 10, 12, 0.92);
+}
+
+.comment-action svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.comment-bar {
+  margin: 0 auto 18px;
+  width: 100%;
+  padding: 0;
+}
+
+.comment-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(240, 180, 41, 0.16);
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.86);
+  box-shadow: inset 0 0 18px rgba(240, 180, 41, 0.05);
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, #f0b429, #ffb24a);
+  color: #1a1305;
+  font-weight: 700;
+}
+
+.comment-composer {
+  flex: 1;
+}
+
+.comment-input {
+  min-height: 38px;
+  max-height: 120px;
+  resize: none;
+  border: 0;
+  padding: 10px 4px;
+  background: transparent;
+  color: #f7e7b5;
+  outline: none;
+  box-shadow: none;
+}
+
+.comment-input::placeholder {
+  color: rgba(247, 231, 181, 0.45);
+}
+
+.comment-submit {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .post-meta-line {
   margin-bottom: 10px;
 }

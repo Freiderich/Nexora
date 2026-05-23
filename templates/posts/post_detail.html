@@ -35,22 +35,34 @@
         {% csrf_token %}
         <button type="submit" class="ghost reaction-main" data-like-count>❤ {{ post.likes_count }}</button>
       </form>
+      <a class="comment-action" href="#comment-form" aria-label="Comments" data-comment-jump>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 5.5C4 4.12 5.12 3 6.5 3h11C18.88 3 20 4.12 20 5.5v8c0 1.38-1.12 2.5-2.5 2.5H10l-4.5 3v-3.5C4.62 15.5 4 14.88 4 14V5.5Zm2 0V14h3v1.3L11.1 14H17.5c.28 0 .5-.22.5-.5v-8c0-.28-.22-.5-.5-.5h-11c-.28 0-.5.22-.5.5Z" fill="currentColor"/>
+        </svg>
+        {{ comments|length }}
+      </a>
     </div>
+
+    <section class="comment-bar" id="comment-form">
+      {% if user.is_authenticated %}
+        <form class="comment-form" method="post" action="{% url 'comment_create' post_id=post.id %}">
+          {% csrf_token %}
+          <div class="comment-avatar" aria-hidden="true">{{ user.username|first|upper }}</div>
+          <div class="comment-composer">
+            <label class="sr-only" for="{{ form.body.id_for_label }}">Comment</label>
+            {{ form.body }}
+          </div>
+          <button type="submit" class="primary comment-submit">Post</button>
+        </form>
+      {% else %}
+        <p class="muted">Login to join the conversation.</p>
+      {% endif %}
+    </section>
   </section>
   {% endwith %}
 
-  <section class="comments">
+  <section class="comments" id="comments">
     <h2>Comments</h2>
-    {% if user.is_authenticated %}
-      <form class="comment-form" method="post" action="{% url 'comment_create' post_id=post.id %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="primary">Post comment</button>
-      </form>
-    {% else %}
-      <p class="muted">Login to join the conversation.</p>
-    {% endif %}
-
     <div class="comment-list">
       {% for comment in comments %}
         <div class="comment">
