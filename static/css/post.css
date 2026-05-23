@@ -171,6 +171,12 @@
   background: rgba(10, 10, 12, 0.9);
   border: 1px solid rgba(240, 180, 41, 0.3);
   box-shadow: inset 0 0 0 1px rgba(240, 180, 41, 0.08), inset 0 16px 32px rgba(0, 0, 0, 0.4);
+  color: #f7e7b5;
+  caret-color: #f0b429;
+}
+
+.post-form textarea::placeholder {
+  color: rgba(247, 231, 181, 0.35);
 }
 
 .post-form .file-control {
@@ -218,6 +224,15 @@
 .file-trigger:hover {
   border-color: rgba(240, 180, 41, 0.6);
   color: #f0b429;
+}
+
+.file-readout {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247, 231, 181, 0.62);
 }
 
 .file-icon {

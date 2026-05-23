@@ -95,6 +95,7 @@
                 Choose File
               </label>
             </div>
+            <span class="file-readout" id="file-readout">No attachment selected</span>
           </p>
           <button type="submit" class="primary">Save Signal</button>
         </div>
@@ -126,6 +127,8 @@
     const meterFill = document.getElementById("post-meter-fill");
     const meterLabel = document.getElementById("post-meter-label");
     const statusLine = document.getElementById("post-status");
+    const fileInput = document.getElementById("{{ form.image.id_for_label }}");
+    const fileReadout = document.getElementById("file-readout");
     const maxSignal = 240;
 
     const updateSignal = () => {
@@ -156,6 +159,17 @@
     if (postMessage) {
       postMessage.addEventListener("input", updateSignal);
       updateSignal();
+    }
+
+    if (fileInput && fileReadout) {
+      const updateFileReadout = () => {
+        fileReadout.textContent = fileInput.files && fileInput.files.length
+          ? `Attached: ${fileInput.files[0].name}`
+          : "No attachment selected";
+      };
+
+      fileInput.addEventListener("change", updateFileReadout);
+      updateFileReadout();
     }
   </script>
 {% endblock %}
