@@ -55,7 +55,7 @@
 
       document.addEventListener("submit", async (event) => {
         const form = event.target;
-        if (!form.matches(".reaction-picker form, .post-actions form, .post-reactions form, .comment-form")) return;
+        if (!form.matches(".reaction-picker form, .post-actions form, .post-reactions form, .comment-form, .comment-delete")) return;
         event.preventDefault();
         try {
           const response = await fetch(form.action, {
@@ -74,6 +74,22 @@
               const input = form.querySelector(".comment-input");
               if (input) input.value = "";
               if (data.comment) appendInlineComment(form, data.comment, data.comments_count);
+            }
+            if (form.classList.contains("comment-delete")) {
+              const card = form.closest(".card") || document;
+              const comment = form.closest("[data-comment-id]");
+              if (comment) comment.remove();
+              const count = card.querySelector(".comment-action");
+              if (count && data.comments_count !== undefined) {
+                count.lastChild.textContent = ` ${data.comments_count}`;
+              }
+              const list = card.querySelector("[data-comment-list]");
+              if (list && !list.querySelector(".inline-comment")) {
+                const empty = document.createElement("p");
+                empty.className = "muted";
+                empty.textContent = "No comments yet.";
+                list.append(empty);
+              }
             }
           }
         } catch (error) {
@@ -96,12 +112,30 @@
         if (empty && empty.textContent.trim() === "No comments yet.") empty.remove();
         const item = document.createElement("div");
         item.className = "comment inline-comment";
+        item.dataset.commentId = comment.id;
+        const canEdit = comment.can_edit;
+        const canDelete = comment.can_delete;
+        const actions =
+          canEdit || canDelete
+            ? `
+            <div class="comment-actions">
+              ${canEdit ? `<button type="button" class="link-button" data-comment-edit data-comment-edit-url="${escapeHtml(comment.edit_url)}">Edit</button>` : ""}
+              ${canDelete ? `
+                <form class="comment-delete" method="post" action="${escapeHtml(comment.delete_url)}">
+                  <input type="hidden" name="csrfmiddlewaretoken" value="${escapeHtml(comment.csrf_token)}" />
+                  <button type="submit" class="link-button">Delete</button>
+                </form>
+              ` : ""}
+            </div>
+          `
+            : "";
         item.innerHTML = `
           <div class="comment-meta">
             <a href="${escapeHtml(comment.author_url)}">@${escapeHtml(comment.author)}</a>
             <span class="muted">${escapeHtml(comment.created_at)}</span>
           </div>
-          <p>${escapeHtml(comment.body)}</p>
+          <p data-comment-body>${escapeHtml(comment.body)}</p>
+          ${actions}
         `;
         list.prepend(item);
         const items = list.querySelectorAll(".inline-comment");
@@ -111,6 +145,38 @@
       };
 
       document.addEventListener("click", (event) => {
+        const editToggle = event.target.closest?.("[data-comment-edit]");
+        if (editToggle) {
+          const comment = editToggle.closest("[data-comment-id]");
+          if (!comment) return;
+          const body = comment.querySelector("[data-comment-body]");
+          if (!body) return;
+          const current = body.textContent.trim();
+          const next = window.prompt("Edit comment", current);
+          if (next === null || next.trim() === current) return;
+          const url = editToggle.getAttribute("data-comment-edit-url");
+          if (!url) return;
+          const token = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRFToken": token || "",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ body: next.trim() }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (!data.ok) return;
+              body.textContent = data.comment.body;
+              const meta = comment.querySelector(".comment-meta .muted");
+              if (meta) meta.textContent = data.comment.created_at;
+            })
+            .catch((error) => console.error(error));
+          return;
+        }
+
         const commentToggle = event.target.closest?.("[data-comment-toggle]");
         if (commentToggle) {
           event.preventDefault();

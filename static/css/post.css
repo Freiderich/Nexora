@@ -76,6 +76,19 @@
   flex: 0 0 auto;
 }
 
+.comment-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.comment-actions .link-button {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(240, 180, 41, 0.85);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

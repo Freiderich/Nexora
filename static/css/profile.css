@@ -258,6 +258,19 @@
   color: rgba(247, 231, 181, 0.85);
 }
 
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.comment-actions .link-button {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(240, 180, 41, 0.85);
+}
+
 .comment-form {
   display: flex;
   gap: 12px;

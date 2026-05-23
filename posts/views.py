@@ -132,10 +132,14 @@ def comment_create(request, post_id):
                                 "profile", kwargs={"username": comment.author.username}
                             ),
                             "body": comment.body,
-                            "created_at": created_at.strftime("%b %d, %Y"),
+                            "created_at": created_at.strftime("%b %d, %Y %H:%M"),
+                            "can_edit": True,
                             "can_delete": True,
                             "delete_url": reverse(
                                 "comment_delete", kwargs={"comment_id": comment.id}
+                            ),
+                            "edit_url": reverse(
+                                "comment_update", kwargs={"comment_id": comment.id}
                             ),
                         },
                     }
@@ -150,10 +154,42 @@ def comment_create(request, post_id):
 @login_required
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, author=request.user)
-    post_id = comment.post_id
+    post = comment.post
     if request.method == "POST":
         comment.delete()
-    return redirect("post_detail", post_id=post_id)
+        if _is_ajax(request):
+            return JsonResponse(
+                {"ok": True, "comments_count": post.comments.count()}
+            )
+    if _is_ajax(request):
+        return JsonResponse({"ok": False}, status=405)
+    return redirect("post_detail", post_id=post.id)
+
+
+@login_required
+def comment_update(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, author=request.user)
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save(update_fields=["body"])
+            if _is_ajax(request):
+                created_at = timezone.localtime(comment.created_at)
+                return JsonResponse(
+                    {
+                        "ok": True,
+                        "comment": {
+                            "id": comment.id,
+                            "body": comment.body,
+                            "created_at": created_at.strftime("%b %d, %Y %H:%M"),
+                        },
+                    }
+                )
+        elif _is_ajax(request):
+            return JsonResponse({"ok": False, "errors": form.errors}, status=400)
+    if _is_ajax(request):
+        return JsonResponse({"ok": False}, status=405)
+    return redirect("post_detail", post_id=comment.post_id)
 
 
 @login_required

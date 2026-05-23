@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div class="post-meta-line"><span class="muted">{{ post.created_at|date:"M d, Y" }}</span></div>
+    <div class="post-meta-line"><span class="muted">{{ post.created_at|date:"M d, Y H:i" }}</span></div>
     <p>{{ post.content }}</p>
     {% if post.image %}
       <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
@@ -65,17 +65,27 @@
     <h2>Comments</h2>
     <div class="comment-list">
       {% for comment in comments %}
-        <div class="comment">
+        <div class="comment" data-comment-id="{{ comment.id }}">
           <div class="comment-meta">
             <a href="{% url 'profile' username=comment.author.username %}">@{{ comment.author.username }}</a>
-            <span class="muted">{{ comment.created_at|date:"M d, Y" }}</span>
+            <span class="muted">{{ comment.created_at|date:"M d, Y H:i" }}</span>
           </div>
-          <p>{{ comment.body }}</p>
+          <p data-comment-body>{{ comment.body }}</p>
           {% if user == comment.author %}
-            <form method="post" action="{% url 'comment_delete' comment_id=comment.id %}">
-              {% csrf_token %}
-              <button type="submit" class="link-button">Delete</button>
-            </form>
+            <div class="comment-actions">
+              <button
+                type="button"
+                class="link-button"
+                data-comment-edit
+                data-comment-edit-url="{% url 'comment_update' comment_id=comment.id %}"
+              >
+                Edit
+              </button>
+              <form class="comment-delete" method="post" action="{% url 'comment_delete' comment_id=comment.id %}">
+                {% csrf_token %}
+                <button type="submit" class="link-button">Delete</button>
+              </form>
+            </div>
           {% endif %}
         </div>
       {% empty %}
