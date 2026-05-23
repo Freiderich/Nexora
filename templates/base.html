@@ -43,6 +43,37 @@
       {% block content %}{% endblock %}
     </main>
     <script>
+      const updateReactionCounts = (form, data) => {
+        const card = form.closest(".card");
+        if (!card) return;
+        const setText = (selector, value) => {
+          const el = card.querySelector(selector);
+          if (el && value !== undefined) el.textContent = value;
+        };
+        setText('[data-like-count]', `❤ ${data.likes_count}`);
+      };
+
+      document.addEventListener("submit", async (event) => {
+        const form = event.target;
+        if (!form.matches(".reaction-picker form, .post-actions form, .post-reactions form")) return;
+        event.preventDefault();
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRFToken": form.querySelector('[name="csrfmiddlewaretoken"]').value,
+            },
+            body: new FormData(form),
+          });
+          if (!response.ok) return;
+          const data = await response.json();
+          if (data.ok) updateReactionCounts(form, data);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+
       document.addEventListener("click", (event) => {
         document.querySelectorAll(".post-menu").forEach((menu) => {
           const wrap = menu.closest(".post-menu-wrap");

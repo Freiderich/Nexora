@@ -1,9 +1,29 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentForm, PostForm
 from .models import Comment, Like, Post, Reaction
+
+
+def _post_reaction_payload(post):
+    stats = post.reactions.aggregate(
+        reaction_love_count=Count("id", filter=Q(kind="love")),
+        reaction_laugh_count=Count("id", filter=Q(kind="laugh")),
+        reaction_wow_count=Count("id", filter=Q(kind="wow")),
+        reaction_sad_count=Count("id", filter=Q(kind="sad")),
+        reaction_fire_count=Count("id", filter=Q(kind="fire")),
+        reactions_count=Count("id"),
+    )
+    return {
+        **stats,
+        "likes_count": post.likes.count(),
+    }
+
+
+def _is_ajax(request):
+    return request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
 
 def home(request):
@@ -114,6 +134,8 @@ def toggle_like(request, post_id):
     like, created = Like.objects.get_or_create(post=post, user=request.user)
     if not created:
         like.delete()
+    if _is_ajax(request):
+        return JsonResponse({"ok": True, **_post_reaction_payload(post)})
     return redirect(request.META.get("HTTP_REFERER", "home"))
 
 
@@ -145,6 +167,8 @@ def add_reaction(request, post_id, kind):
         else:
             reaction.kind = kind
             reaction.save(update_fields=["kind"])
+    if _is_ajax(request):
+        return JsonResponse({"ok": True, **_post_reaction_payload(post)})
     return redirect(request.META.get("HTTP_REFERER", "home"))
 
 # Create your views here.

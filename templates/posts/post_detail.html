@@ -31,19 +31,10 @@
       <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
     {% endif %}
     <div class="post-actions">
-      <div class="reaction-picker">
-        <form method="post" action="{% url 'toggle_like' post_id=post.id %}">
-          {% csrf_token %}
-          <button type="submit" class="ghost reaction-main">❤ {{ post.likes_count }}</button>
-        </form>
-        <div class="reaction-tray">
-          <form method="post" action="{% url 'add_reaction' post_id=post.id kind='love' %}">{% csrf_token %}<button type="submit" class="reaction-option" aria-label="Love">❤</button></form>
-          <form method="post" action="{% url 'add_reaction' post_id=post.id kind='laugh' %}">{% csrf_token %}<button type="submit" class="reaction-option" aria-label="Laugh">😂</button></form>
-          <form method="post" action="{% url 'add_reaction' post_id=post.id kind='wow' %}">{% csrf_token %}<button type="submit" class="reaction-option" aria-label="Wow">😮</button></form>
-          <form method="post" action="{% url 'add_reaction' post_id=post.id kind='sad' %}">{% csrf_token %}<button type="submit" class="reaction-option" aria-label="Sad">😢</button></form>
-          <form method="post" action="{% url 'add_reaction' post_id=post.id kind='fire' %}">{% csrf_token %}<button type="submit" class="reaction-option" aria-label="Fire">🔥</button></form>
-        </div>
-      </div>
+      <form method="post" action="{% url 'toggle_like' post_id=post.id %}">
+        {% csrf_token %}
+        <button type="submit" class="ghost reaction-main" data-like-count>❤ {{ post.likes_count }}</button>
+      </form>
     </div>
   </section>
   {% endwith %}
