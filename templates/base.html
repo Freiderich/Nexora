@@ -144,36 +144,76 @@
         if (count && commentsCount !== undefined) count.lastChild.textContent = ` ${commentsCount}`;
       };
 
+      const cancelEdit = (comment, body, form) => {
+        comment.dataset.editing = "false";
+        body.hidden = false;
+        form.remove();
+      };
+
       document.addEventListener("click", (event) => {
         const editToggle = event.target.closest?.("[data-comment-edit]");
         if (editToggle) {
           const comment = editToggle.closest("[data-comment-id]");
-          if (!comment) return;
+          if (!comment || comment.dataset.editing === "true") return;
           const body = comment.querySelector("[data-comment-body]");
           if (!body) return;
-          const current = body.textContent.trim();
-          const next = window.prompt("Edit comment", current);
-          if (next === null || next.trim() === current) return;
           const url = editToggle.getAttribute("data-comment-edit-url");
           if (!url) return;
-          const token = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-              "X-CSRFToken": token || "",
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({ body: next.trim() }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (!data.ok) return;
-              body.textContent = data.comment.body;
-              const meta = comment.querySelector(".comment-meta .muted");
-              if (meta) meta.textContent = data.comment.created_at;
+          const current = body.textContent.trim();
+          comment.dataset.editing = "true";
+          body.hidden = true;
+          const form = document.createElement("form");
+          form.className = "comment-edit-form";
+          form.innerHTML = `
+            <textarea class="comment-edit-input" rows="2"></textarea>
+            <div class="comment-edit-actions">
+              <button type="submit" class="primary">Save</button>
+              <button type="button" class="link-button" data-comment-cancel>Cancel</button>
+            </div>
+          `;
+          const input = form.querySelector(".comment-edit-input");
+          input.value = current;
+          body.insertAdjacentElement("afterend", form);
+          input.focus();
+
+          form.addEventListener("submit", (submitEvent) => {
+            submitEvent.preventDefault();
+            const next = input.value.trim();
+            if (!next || next === current) {
+              cancelEdit(comment, body, form);
+              return;
+            }
+            const token = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+            fetch(url, {
+              method: "POST",
+              headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": token || "",
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({ body: next }),
             })
-            .catch((error) => console.error(error));
+              .then((response) => response.json())
+              .then((data) => {
+                if (!data.ok) return;
+                body.textContent = data.comment.body;
+                const meta = comment.querySelector(".comment-meta .muted");
+                if (meta) meta.textContent = data.comment.created_at;
+                cancelEdit(comment, body, form);
+              })
+              .catch((error) => console.error(error));
+          });
+          return;
+        }
+
+        const cancelToggle = event.target.closest?.("[data-comment-cancel]");
+        if (cancelToggle) {
+          const form = cancelToggle.closest(".comment-edit-form");
+          const comment = form && form.closest("[data-comment-id]");
+          const body = comment && comment.querySelector("[data-comment-body]");
+          if (comment && body && form) {
+            cancelEdit(comment, body, form);
+          }
           return;
         }
 
