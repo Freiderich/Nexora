@@ -107,10 +107,16 @@
   border: 1px solid rgba(240, 180, 41, 0.35);
   color: #f7e7b5;
   box-shadow: 0 24px 60px rgba(240, 180, 41, 0.08);
+  padding: 18px 20px;
 }
 
 .home-card .card-header {
   margin-bottom: 8px;
+}
+
+.home-card p {
+  margin: 0 0 12px;
+  line-height: 1.45;
 }
 
 .home-card a {
@@ -169,6 +175,10 @@
 .home-card .post-image {
   border-radius: 16px;
   border: 1px solid rgba(240, 180, 41, 0.2);
+  margin-top: 10px;
+  max-height: 320px;
+  width: 100%;
+  object-fit: cover;
 }
 
 @media (max-width: 900px) {
