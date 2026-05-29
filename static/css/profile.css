@@ -293,6 +293,13 @@
   align-items: center;
 }
 
+.profile-card .post-image {
+  max-height: 320px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .comment-form {
   display: flex;
   gap: 12px;
