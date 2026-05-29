@@ -46,6 +46,7 @@
       const updateReactionCounts = (form, data) => {
         const card = form.closest(".card");
         if (!card) return;
+        if (data.likes_count === undefined) return;
         const setText = (selector, value) => {
           const el = card.querySelector(selector);
           if (el && value !== undefined) el.textContent = value;
