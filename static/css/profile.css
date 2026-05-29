@@ -30,7 +30,7 @@
   color: #f7e7b5;
   display: grid;
   gap: 28px;
-  padding: 40px 0 80px;
+  padding: 40px 0 100px;
 }
 
 .profile-hero,
@@ -40,13 +40,13 @@
 }
 
 .profile-edit-card {
-  max-width: 720px;
+  max-width: 750px;
 }
 
 .profile-hero {
   display: grid;
   grid-template-columns: 120px 1fr;
-  gap: 28px;
+  gap: 30px;
   align-items: center;
 }
 
