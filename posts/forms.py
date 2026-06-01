@@ -4,12 +4,20 @@ from .models import Comment, Post
 
 
 class PostForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.is_bound:
+            if self.instance and self.instance.pk:
+                self.fields["visibility"].initial = self.instance.visibility
+            else:
+                self.fields["visibility"].initial = Post.VISIBILITY_PUBLIC
+
     class Meta:
         model = Post
         fields = ["content", "image", "visibility"]
         widgets = {
             "content": forms.Textarea(attrs={"rows": 4}),
-            "visibility": forms.Select(),
+            "visibility": forms.HiddenInput(),
         }
 
 

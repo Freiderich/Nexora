@@ -39,8 +39,14 @@
         <div class="terminal-subtitle">// New Signal Entry //</div>
       {% endif %}
     </div>
+    {% if form.non_field_errors %}
+      <div class="message">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="terminal-form post-form">
       {% csrf_token %}
+      {{ form.visibility }}
       <div class="post-layout">
         <aside class="post-rail post-rail-left" aria-hidden="true">
           <div class="rail-panel">
@@ -84,6 +90,9 @@
           <p>
             <label for="{{ form.content.id_for_label }}">Message</label>
             {{ form.content }}
+            {% if form.content.errors %}
+              <span class="muted">{{ form.content.errors }}</span>
+            {% endif %}
           </p>
 
           <p>

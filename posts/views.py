@@ -81,7 +81,7 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect("post_detail", post_id=post.id)
+            return redirect("home")
     else:
         form = PostForm()
     return render(request, "posts/post_form.html", {"form": form, "mode": "create"})
