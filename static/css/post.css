@@ -127,6 +127,7 @@
   margin-bottom: 10px;
 }
 
+
 .post-layout {
   display: grid;
   grid-template-columns: minmax(140px, 180px) minmax(0, 1fr) minmax(140px, 180px);
@@ -356,6 +357,23 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(247, 231, 181, 0.62);
+}
+
+.file-preview {
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(240, 180, 41, 0.25);
+  background: rgba(10, 10, 12, 0.82);
+}
+
+.file-preview img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 12px;
 }
 
 .file-icon {

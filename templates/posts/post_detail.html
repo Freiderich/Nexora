@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/post.css' %}" />
+{% endblock %}
 
 {% block content %}
   {% with post_visibility=post.get_visibility_display %}

@@ -30,6 +30,25 @@
   margin-bottom: 28px;
 }
 
+.card.detail {
+  background: #0b0b0f;
+  border: 1px solid rgba(240, 180, 41, 0.3);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  color: #f7e7b5;
+}
+
+.card.detail .post-menu-toggle,
+.card.detail .post-menu a,
+.card.detail .post-menu-muted,
+.card.detail a,
+.card.detail .link-button {
+  color: inherit;
+}
+
+.card.detail .post-meta-line .muted {
+  color: rgba(247, 231, 181, 0.6);
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -168,4 +187,21 @@ form p {
   display: flex;
   justify-content: space-between;
   font-weight: 600;
+}
+
+.post-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-image {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.card.detail .post-image {
+  max-height: 360px;
 }

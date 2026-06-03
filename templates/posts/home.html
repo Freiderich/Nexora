@@ -106,10 +106,12 @@
               {% endif %}
             </div>
           </div>
-          <p data-post-content>{{ post.content }}</p>
-        {% if post.image %}
-          <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
-        {% endif %}
+          <a class="post-link" href="{% url 'post_detail' post_id=post.id %}">
+            <p data-post-content>{{ post.content }}</p>
+          {% if post.image %}
+            <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
+          {% endif %}
+          </a>
           <div class="post-actions">
             <form method="post" action="{% url 'toggle_like' post_id=post.id %}">
               {% csrf_token %}

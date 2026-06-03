@@ -105,6 +105,9 @@
               </label>
             </div>
             <span class="file-readout" id="file-readout">No attachment selected</span>
+            <div class="file-preview" id="file-preview" hidden>
+              <img id="file-preview-image" alt="Selected attachment preview" />
+            </div>
           </p>
           <button type="submit" class="primary">Save Signal</button>
         </div>
@@ -138,7 +141,10 @@
     const statusLine = document.getElementById("post-status");
     const fileInput = document.getElementById("{{ form.image.id_for_label }}");
     const fileReadout = document.getElementById("file-readout");
+    const filePreview = document.getElementById("file-preview");
+    const filePreviewImage = document.getElementById("file-preview-image");
     const maxSignal = 240;
+    let previewUrl = null;
 
     const updateSignal = () => {
       if (!postMessage) {
@@ -172,9 +178,21 @@
 
     if (fileInput && fileReadout) {
       const updateFileReadout = () => {
-        fileReadout.textContent = fileInput.files && fileInput.files.length
-          ? `Attached: ${fileInput.files[0].name}`
+        const file = fileInput.files && fileInput.files[0];
+        fileReadout.textContent = file
+          ? `Attached: ${file.name}`
           : "No attachment selected";
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+          previewUrl = null;
+        }
+        if (file && file.type && file.type.startsWith("image/")) {
+          previewUrl = URL.createObjectURL(file);
+          if (filePreviewImage) filePreviewImage.src = previewUrl;
+          if (filePreview) filePreview.hidden = false;
+        } else if (filePreview) {
+          filePreview.hidden = true;
+        }
       };
 
       fileInput.addEventListener("change", updateFileReadout);

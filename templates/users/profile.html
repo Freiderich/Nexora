@@ -93,10 +93,12 @@
             </div>
           </div>
           <div class="post-meta-line"><span class="muted">{{ post.created_at|date:"M d, Y H:i" }}</span></div>
-          <p>{{ post.content }}</p>
-          {% if post.image %}
-            <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
-          {% endif %}
+          <a class="post-link" href="{% url 'post_detail' post_id=post.id %}">
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+              <img class="post-image" src="{{ post.image.url }}" alt="Post image" />
+            {% endif %}
+          </a>
           <div class="post-actions">
             <form method="post" action="{% url 'toggle_like' post_id=post.id %}">{% csrf_token %}<button type="submit" class="ghost reaction-main" data-like-count>❤ {{ post.likes_count }}</button></form>
             <a
