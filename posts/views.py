@@ -101,6 +101,31 @@ def post_edit(request, post_id):
 
 
 @login_required
+def post_update(request, post_id):
+    post = get_object_or_404(Post, id=post_id, author=request.user)
+    if request.method == "POST":
+        content = (request.POST.get("content") or "").strip()
+        if not content:
+            if _is_ajax(request):
+                return JsonResponse({"ok": False, "error": "Content required"}, status=400)
+            return redirect("home")
+        post.content = content
+        post.save(update_fields=["content", "updated_at"])
+        if _is_ajax(request):
+            created_at = timezone.localtime(post.created_at)
+            return JsonResponse(
+                {
+                    "ok": True,
+                    "content": post.content,
+                    "created_at": created_at.strftime("%b %d, %Y %H:%M"),
+                }
+            )
+    if _is_ajax(request):
+        return JsonResponse({"ok": False}, status=405)
+    return redirect("home")
+
+
+@login_required
 def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id, author=request.user)
     if request.method == "POST":

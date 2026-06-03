@@ -261,6 +261,67 @@
           }
         });
       });
+
+      document.addEventListener("click", (event) => {
+        const editToggle = event.target.closest?.("[data-post-edit]");
+        if (!editToggle) return;
+        const card = editToggle.closest(".card");
+        if (!card || card.dataset.editing === "true") return;
+        const content = card.querySelector("[data-post-content]");
+        if (!content) return;
+        const url = editToggle.getAttribute("data-post-edit-url");
+        if (!url) return;
+        const current = content.textContent.trim();
+        card.dataset.editing = "true";
+        content.hidden = true;
+        const form = document.createElement("form");
+        form.className = "post-edit-form";
+        form.innerHTML = `
+          <textarea class="post-edit-input" rows="3"></textarea>
+          <div class="post-edit-actions">
+            <button type="submit" class="primary">Save</button>
+            <button type="button" class="link-button" data-post-cancel>Cancel</button>
+          </div>
+        `;
+        const input = form.querySelector(".post-edit-input");
+        input.value = current;
+        content.insertAdjacentElement("afterend", form);
+        input.focus();
+
+        const cancelEdit = () => {
+          card.dataset.editing = "false";
+          content.hidden = false;
+          form.remove();
+        };
+
+        form.addEventListener("submit", (submitEvent) => {
+          submitEvent.preventDefault();
+          const next = input.value.trim();
+          if (!next || next === current) {
+            cancelEdit();
+            return;
+          }
+          const token = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRFToken": token || "",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ content: next }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (!data.ok) return;
+              content.textContent = data.content;
+              cancelEdit();
+            })
+            .catch((error) => console.error(error));
+        });
+
+        form.querySelector("[data-post-cancel]").addEventListener("click", cancelEdit);
+      });
     </script>
   </body>
 </html>

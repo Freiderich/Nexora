@@ -253,6 +253,47 @@
   margin-top: 16px;
 }
 
+.post-meta-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-owner-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-owner-actions .link-button {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(240, 180, 41, 0.85);
+}
+
+.post-edit-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.post-edit-input {
+  min-height: 120px;
+  border-radius: 12px;
+  border: 1px solid rgba(240, 180, 41, 0.2);
+  background: rgba(10, 10, 12, 0.85);
+  color: #f7e7b5;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.post-edit-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .reaction-main {
   min-width: 54px;
   justify-content: center;
