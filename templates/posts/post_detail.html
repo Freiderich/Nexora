@@ -31,10 +31,13 @@
     @keyframes gridFade { from { opacity: 0; } to { opacity: 0.2; } }
 
     body.post-detail .site-header {
-      background: transparent;
+      background: rgba(8, 8, 10, 0.95);
       border-bottom: 1px solid rgba(240,180,41,0.2);
-      position: relative;
-      z-index: 3;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
     }
     body.post-detail .logo { color: #f7e7b4; }
     body.post-detail .menu a, body.post-detail .menu .link-button { color: #f7e7b4; }
@@ -45,6 +48,7 @@
       z-index: 2;
       width: min(100% - 48px, 980px);
       max-width: none;
+      padding-top: 70px;
     }
 
     body.post-detail .muted { color: rgba(247,231,181,0.55); }

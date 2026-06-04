@@ -17,9 +17,13 @@
 }
 
 .profile-body .site-header {
+  background: rgba(8, 8, 10, 0.95);
   border-bottom: 1px solid rgba(240, 180, 41, 0.2);
-  position: relative;
-  z-index: 3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 .profile-terminal {
@@ -30,7 +34,8 @@
   color: #f7e7b5;
   display: grid;
   gap: 28px;
-  padding: 40px 0 100px;
+  padding-top: 70px;
+  padding-bottom: 100px;
 }
 
 .profile-hero,
