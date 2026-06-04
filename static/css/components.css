@@ -28,9 +28,10 @@
 
 .card.detail {
   margin-bottom: 28px;
-}
-
-.card.detail {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 24px;
   background: #0b0b0f;
   border: 1px solid rgba(240, 180, 41, 0.3);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
@@ -203,5 +204,36 @@ form p {
 }
 
 .card.detail .post-image {
-  max-height: 360px;
+  max-height: 300px;
+}
+
+body.post-detail .comments h2 {
+  color: #f7e7b5;
+}
+
+body.post-detail .comment {
+  background: rgba(15, 15, 18, 0.88);
+  border: 1px solid rgba(240, 180, 41, 0.12);
+  color: #f7e7b5;
+}
+
+body.post-detail .comment a {
+  color: #f0b429;
+}
+
+body.post-detail .comment .muted {
+  color: rgba(247, 231, 181, 0.5);
+}
+
+body.post-detail input,
+body.post-detail textarea {
+  border-color: rgba(240, 180, 41, 0.2);
+}
+
+body.post-detail .comment-input {
+  border: 0;
+}
+
+body.post-detail .danger {
+  color: #e05242;
 }

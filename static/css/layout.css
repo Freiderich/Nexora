@@ -7,6 +7,11 @@
   border-bottom: 1px solid var(--border);
 }
 
+body.post-detail .site-header {
+  background: rgba(8, 8, 10, 0.88);
+  border-bottom-color: rgba(240, 180, 41, 0.2);
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -32,9 +37,23 @@
   color: var(--muted);
 }
 
+body.post-detail .menu a,
+body.post-detail .menu .link-button {
+  color: rgba(247, 231, 181, 0.75);
+}
+
 .menu a:hover,
 .menu .link-button:hover {
   color: var(--ink);
+}
+
+body.post-detail .logo {
+  color: #f0b429;
+}
+
+body.post-detail .menu a:hover,
+body.post-detail .menu .link-button:hover {
+  color: #f0b429;
 }
 
 main {

@@ -26,6 +26,26 @@ body {
   min-height: 100vh;
 }
 
+body.post-detail {
+  background: radial-gradient(circle at top, rgba(25, 24, 18, 0.95), #070707 65%, #030303 100%);
+  color: #f7e7b5;
+}
+
+body.post-detail .muted {
+  color: rgba(247, 231, 181, 0.55);
+}
+
+body.post-detail input,
+body.post-detail textarea {
+  background: rgba(10, 10, 12, 0.9);
+  border: 1px solid rgba(240, 180, 41, 0.2);
+  color: #f7e7b5;
+}
+
+body.post-detail .danger {
+  color: #e05242;
+}
+
 a {
   color: inherit;
   text-decoration: none;
