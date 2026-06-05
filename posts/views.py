@@ -36,6 +36,7 @@ def home(request):
         Post.objects.select_related("author", "author__profile")
         .prefetch_related(Prefetch("comments", queryset=comment_qs), "likes")
         .exclude(visibility=Post.VISIBILITY_PRIVATE)
+        .order_by("-created_at")
         .annotate(
             likes_count=Count("likes"),
             reactions_count=Count("reactions"),
