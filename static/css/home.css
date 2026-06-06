@@ -114,6 +114,11 @@
   box-shadow: 0 24px 60px rgba(240, 180, 41, 0.08);
   padding: 18px 20px;
   position: relative;
+  z-index: 1;
+}
+
+.home-card:has(.post-menu:not([hidden])) {
+  z-index: 100;
 }
 
 .home-card .card-header {
@@ -193,6 +198,7 @@
 
 .post-menu-wrap {
   position: relative;
+  z-index: 50;
 }
 
 .post-menu-toggle {
@@ -216,17 +222,38 @@
   border: 1px solid rgba(240, 180, 41, 0.25);
   background: rgba(7, 7, 9, 0.98);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-  z-index: 5;
+  z-index: 50;
 }
 
 .post-menu a,
 .post-menu span {
   display: block;
   padding: 8px 10px;
-  color: #f7e7b5;
+  color: #f7e7b5 !important;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.65rem;
+  border-radius: 8px;
+}
+
+.post-menu a:hover {
+  background: rgba(240, 180, 41, 0.15);
+  color: #f0b429 !important;
+}
+
+.post-menu .danger {
+  color: #f8d36b !important;
+}
+
+.post-menu .danger:hover {
+  color: #ff6b5a !important;
+  background: rgba(255, 107, 90, 0.12);
+}
+
+.post-menu hr {
+  border: 0;
+  border-top: 1px solid rgba(240, 180, 41, 0.3);
+  margin: 6px 0;
 }
 
 .post-menu hr {
