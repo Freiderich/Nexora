@@ -66,44 +66,28 @@
             <div class="home-card-label">// Live Signal //</div>
             <div class="post-menu-wrap">
               <button class="post-menu-toggle" type="button" aria-label="Post options" aria-expanded="false">...</button>
-            <div class="post-menu" hidden>
-              <div class="post-menu-head">
-                <span>Visibility</span>
-                <span class="post-visibility-tag">{{ post_visibility }}</span>
+              <div class="post-menu" hidden>
+                <div class="post-menu-head">
+                  <span>Visibility</span>
+                  <span class="post-visibility-tag">{{ post_visibility }}</span>
+                </div>
+                {% if user == post.author %}
+                  <a href="{% url 'set_visibility' post_id=post.id visibility='public' %}">Public</a>
+                  <a href="{% url 'set_visibility' post_id=post.id visibility='unlisted' %}">Unlisted</a>
+                  <a href="{% url 'set_visibility' post_id=post.id visibility='private' %}">Private</a>
+                  <hr />
+                  <a href="{% url 'post_edit' post_id=post.id %}">Edit post</a>
+                  <a href="{% url 'post_delete' post_id=post.id %}" class="danger">Delete post</a>
+                {% else %}
+                  <span class="post-menu-muted">Visible to {{ post_visibility|lower }}</span>
+                {% endif %}
               </div>
-              {% if user == post.author %}
-                <a href="{% url 'set_visibility' post_id=post.id visibility='public' %}">Public</a>
-                <a href="{% url 'set_visibility' post_id=post.id visibility='unlisted' %}">Unlisted</a>
-                <a href="{% url 'set_visibility' post_id=post.id visibility='private' %}">Private</a>
-                <hr />
-                <a href="{% url 'post_edit' post_id=post.id %}">Edit post</a>
-                <a href="{% url 'post_delete' post_id=post.id %}" class="danger">Delete post</a>
-              {% else %}
-                <span class="post-menu-muted">Visible to {{ post_visibility|lower }}</span>
-              {% endif %}
             </div>
           </div>
-        </div>
           <div class="card-header">
             <a href="{% url 'profile' username=post.author.username %}">@{{ post.author.username }}</a>
             <div class="post-meta-actions">
               <span class="muted" data-post-created>{{ post.created_at|date:"M d, Y H:i" }}</span>
-              {% if user == post.author %}
-                <div class="post-owner-actions">
-                  <button
-                    type="button"
-                    class="link-button"
-                    data-post-edit
-                    data-post-edit-url="{% url 'post_update' post_id=post.id %}"
-                  >
-                    Edit
-                  </button>
-                  <form method="post" action="{% url 'post_delete' post_id=post.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="link-button">Delete</button>
-                  </form>
-                </div>
-              {% endif %}
             </div>
           </div>
           <a class="post-link" href="{% url 'post_detail' post_id=post.id %}">
