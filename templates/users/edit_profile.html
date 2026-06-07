@@ -4,11 +4,278 @@
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/register.css' %}" />
   <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/post.css' %}" />
+  <style>
+    .edit-card {
+      width: min(100% - 48px, 640px);
+      margin: 80px auto 0;
+      background: rgba(7, 7, 9, 0.92);
+      border: 1px solid rgba(240, 180, 41, 0.35);
+      border-radius: 24px;
+      padding: 36px 32px;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(240, 180, 41, 0.1);
+      animation: cardIntro 0.6s ease 0.15s both;
+    }
+    .edit-card::before,
+    .edit-card::after {
+      content: "";
+      position: absolute;
+      height: 1px;
+      left: 40px;
+      right: 40px;
+      background: linear-gradient(90deg, transparent, #f0b429, transparent);
+    }
+    .edit-card::before { top: 0; }
+    .edit-card::after { bottom: 0; }
+
+    .edit-header {
+      text-align: center;
+      margin-bottom: 32px;
+      display: grid;
+      gap: 8px;
+    }
+    .edit-badge {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      border: 2px solid #f0b429;
+      background: rgba(10, 10, 12, 0.9);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 30px rgba(240, 180, 41, 0.15), inset 0 0 20px rgba(240, 180, 41, 0.1);
+      position: relative;
+    }
+    .edit-badge::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(240, 180, 41, 0.15);
+    }
+    .edit-badge-letter {
+      font-family: "Playfair Display", "Georgia", serif;
+      font-size: 1.8rem;
+      color: #f0b429;
+    }
+    .edit-title {
+      font-family: "Playfair Display", "Georgia", serif;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 1.1rem;
+      color: #f0b429;
+      margin: 0;
+    }
+    .edit-subtitle {
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: rgba(240, 180, 41, 0.5);
+    }
+
+    .edit-section {
+      margin-bottom: 24px;
+    }
+    .edit-section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.65rem;
+      color: rgba(240, 180, 41, 0.65);
+      margin-bottom: 10px;
+    }
+    .edit-section-label::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: #f0b429;
+      transform: rotate(45deg);
+      flex: 0 0 auto;
+    }
+
+    .edit-avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(240, 180, 41, 0.15);
+      background: rgba(10, 10, 12, 0.6);
+      margin-bottom: 24px;
+    }
+    .edit-avatar-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid rgba(240, 180, 41, 0.3);
+      overflow: hidden;
+      flex: 0 0 auto;
+      background: rgba(240, 180, 41, 0.08);
+      display: grid;
+      place-items: center;
+    }
+    .edit-avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .edit-avatar-fallback {
+      font-family: "Playfair Display", "Georgia", serif;
+      font-size: 1.8rem;
+      color: #f0b429;
+    }
+    .edit-avatar-info {
+      flex: 1;
+    }
+    .edit-avatar-info p {
+      margin: 0 0 8px;
+      font-size: 0.75rem;
+      color: rgba(247, 231, 181, 0.6);
+    }
+
+    .file-upload-wrap {
+      position: relative;
+    }
+    .file-upload-wrap input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .file-upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 180, 41, 0.35);
+      background: rgba(10, 10, 12, 0.9);
+      color: #f7e7b5;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.65rem;
+      transition: all 0.2s ease;
+    }
+    .file-upload-label:hover {
+      border-color: rgba(240, 180, 41, 0.6);
+      color: #f0b429;
+      box-shadow: 0 0 16px rgba(240, 180, 41, 0.15);
+    }
+    .file-upload-label::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border: 1px solid #f0b429;
+      border-radius: 2px;
+    }
+    .file-upload-name {
+      margin-top: 8px;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(247, 231, 181, 0.45);
+    }
+
+    .edit-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(240, 180, 41, 0.25);
+      background: rgba(10, 10, 12, 0.9);
+      color: #f7e7b5;
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .edit-textarea::placeholder {
+      color: rgba(247, 231, 181, 0.3);
+    }
+    .edit-textarea:focus {
+      border-color: rgba(240, 180, 41, 0.5);
+      box-shadow: 0 0 20px rgba(240, 180, 41, 0.08);
+    }
+    .char-count {
+      text-align: right;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240, 180, 41, 0.4);
+      margin-top: 6px;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .edit-actions .primary {
+      flex: 1;
+      background: linear-gradient(135deg, #f0b429, #ffb24a);
+      color: #1a1305;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.7rem;
+      padding: 14px 24px;
+    }
+    .edit-actions .primary:hover {
+      box-shadow: 0 0 24px rgba(240, 180, 41, 0.3);
+    }
+    .edit-actions .ghost-btn {
+      padding: 14px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 180, 41, 0.25);
+      background: transparent;
+      color: rgba(247, 231, 181, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.65rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .edit-actions .ghost-btn:hover {
+      border-color: rgba(240, 180, 41, 0.5);
+      color: #f0b429;
+    }
+
+    .edit-scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      border-radius: 24px;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(240, 180, 41, 0.015) 2px,
+        rgba(240, 180, 41, 0.015) 4px
+      );
+    }
+
+    @keyframes cardIntro {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 {% endblock %}
 
 {% block body_class %}profile-body{% endblock %}
-
-{% block main_class %}profile-terminal{% endblock %}
 
 {% block content %}
   <div class="terminal-hex">
@@ -25,18 +292,72 @@
   </div>
   <div class="terminal-accent"></div>
 
-  <section class="terminal-card profile-edit-card" id="terminal-card">
-    <div class="terminal-header">
-      <div class="terminal-badge">
-        <span>⬡</span>
+  <section class="edit-card">
+    <div class="edit-scanline"></div>
+
+    <div class="edit-header">
+      <div class="edit-badge">
+        <span class="edit-badge-letter">{{ user.username|first|upper }}</span>
       </div>
-      <h1 class="terminal-title">Edit Profile</h1>
-      <div class="terminal-subtitle">// Personal Signal Update //</div>
+      <h1 class="edit-title">Edit Profile</h1>
+      <div class="edit-subtitle">// Personal Signal Update //</div>
     </div>
-    <form method="post" enctype="multipart/form-data" class="terminal-form">
+
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="primary">Save Changes</button>
+
+      <div class="edit-avatar-section">
+        <div class="edit-avatar-preview">
+          {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}" alt="Avatar" />
+          {% else %}
+            <span class="edit-avatar-fallback">{{ user.username|first|upper }}</span>
+          {% endif %}
+        </div>
+        <div class="edit-avatar-info">
+          <p>Upload a new profile image</p>
+          <div class="file-upload-wrap">
+            <input type="file" name="image" id="id_image" accept="image/*" />
+            <label for="id_image" class="file-upload-label">Select Image</label>
+            <div class="file-upload-name" id="file-name">No file selected</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <div class="edit-section-label">Biography</div>
+        <textarea
+          name="bio"
+          id="id_bio"
+          class="edit-textarea"
+          rows="5"
+          placeholder="Tell the world who you are..."
+        >{{ form.bio.value|default:"" }}</textarea>
+        <div class="char-count"><span id="bio-count">0</span> / 500</div>
+      </div>
+
+      <div class="edit-actions">
+        <button type="submit" class="primary">Save Changes</button>
+        <a href="{% url 'profile' username=user.username %}" class="ghost-btn">Cancel</a>
+      </div>
     </form>
   </section>
+
+  <script>
+    const bio = document.getElementById("id_bio");
+    const counter = document.getElementById("bio-count");
+    if (bio && counter) {
+      counter.textContent = bio.value.length;
+      bio.addEventListener("input", () => {
+        counter.textContent = bio.value.length;
+      });
+    }
+    const fileInput = document.getElementById("id_image");
+    const fileName = document.getElementById("file-name");
+    if (fileInput && fileName) {
+      fileInput.addEventListener("change", () => {
+        fileName.textContent = fileInput.files.length ? fileInput.files[0].name : "No file selected";
+      });
+    }
+  </script>
 {% endblock %}
