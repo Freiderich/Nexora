@@ -137,6 +137,30 @@
   position: relative;
 }
 
+.profile-card .post-author-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(240, 180, 41, 0.4);
+  flex: 0 0 auto;
+}
+
+.profile-card .post-author-fallback {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid rgba(240, 180, 41, 0.4);
+  background: rgba(240, 180, 41, 0.1);
+  color: #f0b429;
+  font-family: "Playfair Display", "Georgia", serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
 .profile-card a,
 .profile-card .muted {
   color: rgba(247, 231, 181, 0.72);
