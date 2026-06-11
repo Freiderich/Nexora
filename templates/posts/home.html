@@ -141,8 +141,15 @@
               <div class="comment-list inline-comment-list" data-comment-list>
                 {% for comment in post.comments.all|slice:":3" %}
                   <div class="comment inline-comment" data-comment-id="{{ comment.id }}">
-                    <div class="comment-meta">
-                      <a href="{% url 'profile' username=comment.author.username %}">@{{ comment.author.username }}</a>
+                    <div class="comment-header">
+                      <a href="{% url 'profile' username=comment.author.username %}" class="comment-author-link">
+                        {% if comment.author.profile.image %}
+                          <img src="{{ comment.author.profile.image.url }}" alt="" class="comment-author-avatar" />
+                        {% else %}
+                          <span class="comment-author-fallback">{{ comment.author.username|first|upper }}</span>
+                        {% endif %}
+                        <span class="comment-author-name">@{{ comment.author.username }}</span>
+                      </a>
                       <span class="muted">{{ comment.created_at|date:"M d, Y H:i" }}</span>
                     </div>
                     <p data-comment-body>{{ comment.body }}</p>
