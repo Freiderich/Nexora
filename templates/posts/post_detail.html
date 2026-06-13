@@ -76,6 +76,38 @@
     body.post-detail .card.detail .card-header {
       margin-bottom: 8px;
     }
+    body.post-detail .post-author-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #f0b429;
+    }
+    body.post-detail .post-author-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(240, 180, 41, 0.4);
+      flex: 0 0 auto;
+    }
+    body.post-detail .post-author-fallback {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid rgba(240, 180, 41, 0.4);
+      background: rgba(240, 180, 41, 0.1);
+      color: #f0b429;
+      font-family: "Playfair Display", "Georgia", serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+    body.post-detail .post-author-name {
+      font-weight: 600;
+      color: #f0b429;
+    }
     body.post-detail .card.detail p {
       margin: 0 0 12px;
       line-height: 1.45;
@@ -222,7 +254,14 @@
   {% with post_visibility=post.get_visibility_display %}
   <section class="card detail">
     <div class="card-header">
-      <a href="{% url 'profile' username=post.author.username %}">@{{ post.author.username }}</a>
+      <a href="{% url 'profile' username=post.author.username %}" class="post-author-link">
+        {% if post.author.profile.image %}
+          <img src="{{ post.author.profile.image.url }}" alt="" class="post-author-avatar" />
+        {% else %}
+          <span class="post-author-fallback">{{ post.author.username|first|upper }}</span>
+        {% endif %}
+        <span class="post-author-name">@{{ post.author.username }}</span>
+      </a>
       <div class="post-menu-wrap">
         <button class="post-menu-toggle" type="button" aria-label="Post options" aria-expanded="false">...</button>
         <div class="post-menu" hidden>
@@ -265,7 +304,13 @@
       {% if user.is_authenticated %}
         <form class="comment-form" method="post" action="{% url 'comment_create' post_id=post.id %}">
           {% csrf_token %}
-          <div class="comment-avatar" aria-hidden="true">{{ user.username|first|upper }}</div>
+          <div class="comment-avatar" aria-hidden="true">
+            {% if user.profile.image %}
+              <img src="{{ user.profile.image.url }}" alt="" class="comment-avatar-img" />
+            {% else %}
+              {{ user.username|first|upper }}
+            {% endif %}
+          </div>
           <div class="comment-composer">
             <label class="sr-only" for="{{ form.body.id_for_label }}">Comment</label>
             {{ form.body }}
