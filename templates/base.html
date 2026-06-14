@@ -113,7 +113,7 @@
       const appendInlineComment = (form, comment, commentsCount) => {
         const card = form.closest(".card");
         if (!card) return;
-        const list = card.querySelector("[data-comment-list]");
+        const list = card.querySelector("[data-comment-list]") || document.querySelector("[data-comment-list]");
         if (!list) return;
         const empty = list.querySelector(".muted");
         if (empty && empty.textContent.trim() === "No comments yet.") empty.remove();
@@ -122,6 +122,9 @@
         item.dataset.commentId = comment.id;
         const canEdit = comment.can_edit;
         const canDelete = comment.can_delete;
+        const avatarHtml = comment.author_avatar
+          ? `<img src="${escapeHtml(comment.author_avatar)}" alt="" class="comment-author-avatar" />`
+          : `<span class="comment-author-fallback">${escapeHtml(comment.author.charAt(0).toUpperCase())}</span>`;
         const actions =
           canEdit || canDelete
             ? `
@@ -137,8 +140,11 @@
           `
             : "";
         item.innerHTML = `
-          <div class="comment-meta">
-            <a href="${escapeHtml(comment.author_url)}">@${escapeHtml(comment.author)}</a>
+          <div class="comment-header">
+            <a href="${escapeHtml(comment.author_url)}" class="comment-author-link">
+              ${avatarHtml}
+              <span class="comment-author-name">@${escapeHtml(comment.author)}</span>
+            </a>
             <span class="muted">${escapeHtml(comment.created_at)}</span>
           </div>
           <p data-comment-body>${escapeHtml(comment.body)}</p>
@@ -147,7 +153,7 @@
         list.prepend(item);
         const items = list.querySelectorAll(".inline-comment");
         if (items.length > 3) items[items.length - 1].remove();
-        const count = card.querySelector(".comment-action");
+        const count = card.querySelector(".comment-action") || document.querySelector(".comment-action");
         if (count && commentsCount !== undefined) count.lastChild.textContent = ` ${commentsCount}`;
       };
 

@@ -157,6 +157,11 @@ def comment_create(request, post_id):
                             "author_url": reverse(
                                 "profile", kwargs={"username": comment.author.username}
                             ),
+                            "author_avatar": (
+                                comment.author.profile.image.url
+                                if comment.author.profile and comment.author.profile.image
+                                else ""
+                            ),
                             "body": comment.body,
                             "created_at": created_at.strftime("%b %d, %Y %H:%M"),
                             "can_edit": True,
