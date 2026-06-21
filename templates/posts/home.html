@@ -11,6 +11,9 @@
 {% block main_class %}home-terminal{% endblock %}
 
 {% block content %}
+  {% if user.is_authenticated %}
+    <div class="home-side-bar"></div>
+  {% endif %}
   <div class="terminal-hex">
     <svg class="hex-grid" xmlns="http://www.w3.org/2000/svg">
       <defs>
