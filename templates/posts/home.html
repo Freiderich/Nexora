@@ -12,7 +12,27 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    <div class="home-side-bar"></div>
+    <aside class="home-sidebar">
+      <div class="sidebar-profile">
+        <a href="{% url 'profile' username=user.username %}" class="sidebar-profile-link">
+          {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}" alt="" class="sidebar-avatar" />
+          {% else %}
+            <span class="sidebar-avatar-fallback">{{ user.username|first|upper }}</span>
+          {% endif %}
+        </a>
+        <a href="{% url 'profile' username=user.username %}" class="sidebar-username">@{{ user.username }}</a>
+        {% if user.profile.bio %}
+          <p class="sidebar-bio">{{ user.profile.bio|truncatewords:12 }}</p>
+        {% endif %}
+      </div>
+      <nav class="sidebar-nav">
+        <a href="{% url 'home' %}" class="sidebar-nav-link">Home</a>
+        <a href="{% url 'profile' username=user.username %}" class="sidebar-nav-link">Profile</a>
+        <a href="{% url 'post_create' %}" class="sidebar-nav-link">Create Post</a>
+        <a href="{% url 'logout' %}" class="sidebar-nav-link">Logout</a>
+      </nav>
+    </aside>
   {% endif %}
   <div class="terminal-hex">
     <svg class="hex-grid" xmlns="http://www.w3.org/2000/svg">
